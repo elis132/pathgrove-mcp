@@ -1,0 +1,8 @@
+# Normalize line endings so cross-platform PRs don't produce whole-file diffs.
+* text=auto eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf

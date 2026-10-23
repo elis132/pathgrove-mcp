@@ -1,0 +1,466 @@
+{
+  "kind": "actual MCP stdio; real filesystem traversal; no OS cache flush",
+  "platform": "Windows",
+  "architecture": "AMD64",
+  "python": "3.12.11",
+  "sqlite": "3.49.1",
+  "roots": [
+    "C:\\",
+    "D:\\"
+  ],
+  "trials": 5,
+  "query_timeout_seconds": 10,
+  "sampled_peak_server_rss_bytes": 532660224,
+  "queries": [
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "invoice",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 333.404,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 168.061,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 157.906,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 108.798,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 94.487,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 157.906,
+      "first_ms": 333.404,
+      "max_ms": 333.404
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "invoice",
+        "sort": "date-modified-desc",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 98.774,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 102.542,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 98.158,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 116.638,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 158.28,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 102.542,
+      "first_ms": 98.774,
+      "max_ms": 158.28
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "in",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 6743.506,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 6652.803,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 6663.867,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 5073.411,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4562.404,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 6652.803,
+      "first_ms": 6743.506,
+      "max_ms": 6743.506
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "o",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 18.162,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 11.013,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 10.235,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 10.089,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 12.608,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 11.013,
+      "first_ms": 18.162,
+      "max_ms": 18.162
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "ext:pdf",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 9.864,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 8.352,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 10.81,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 10.552,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 11.93,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 10.552,
+      "first_ms": 9.864,
+      "max_ms": 11.93
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "pathgrove-absent-d959d33fa90445bdb36fbf8600c66918",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 29.589,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 10.004,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 14.047,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 10.829,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 10.312,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 10.829,
+      "first_ms": 29.589,
+      "max_ms": 29.589
+    },
+    {
+      "tool": "pathgrove_search_content",
+      "params": {
+        "text": "pathgrove-absent-d959d33fa90445bdb36fbf8600c66918",
+        "extensions": [
+          "txt",
+          "md",
+          "py",
+          "ts",
+          "json"
+        ],
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 10004.997,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10005.958,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10120.706,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10003.427,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 9992.19,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        }
+      ],
+      "median_ms": 10004.997,
+      "first_ms": 10004.997,
+      "max_ms": 10120.706
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "ext:txt;md;py;ts;json content:pathgrove-absent-d959d33fa90445bdb36fbf8600c66918",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 10029.763,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10019.619,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10017.432,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10011.108,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10018.482,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        }
+      ],
+      "median_ms": 10018.482,
+      "first_ms": 10029.763,
+      "max_ms": 10029.763
+    }
+  ],
+  "startup_ms": 1596.919,
+  "first_searchable_seconds": 2.644,
+  "scan_seconds": 7200.333,
+  "scan_finished": false,
+  "status": {
+    "state": "building",
+    "indexed_entries": 4756213,
+    "watching": true,
+    "scan_count": 1,
+    "skipped_entries": 3,
+    "partial": true,
+    "filename_memory_bytes": 142861931,
+    "candidate_cache_bytes": 0,
+    "has_error": false
+  },
+  "cache_bytes": 1308299264,
+  "cached_startup_ms": 3288.464,
+  "cached_first_query": {
+    "ms": 13396.575,
+    "returned": 1,
+    "partial": true,
+    "budget_reached": true,
+    "error": false
+  },
+  "measured_date": "2026-10-23",
+  "hardware": {
+    "cpu": "Intel Core i5-10600K",
+    "ram_bytes": 51436343296,
+    "os": "Windows 11 Pro 10.0.26200",
+    "cache_drive": "C:",
+    "volumes": [
+      {
+        "drive": "C:",
+        "capacity_bytes": 498515951616,
+        "free_bytes_at_start": 40171614208,
+        "model": "Samsung SSD 850 EVO 500GB",
+        "bus": "SATA"
+      },
+      {
+        "drive": "D:",
+        "capacity_bytes": 1000186310656,
+        "free_bytes_at_start": 536456269824,
+        "model": "Kingston SFYRS1000G",
+        "bus": "NVMe"
+      }
+    ]
+  },
+  "runtime_source_sha256_lf": {
+    "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
+    "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce",
+    "backend.py": "b11ea4d8ce82185fef7d0de9c83544a5173d159687f04e6ed50dca818928a7d6",
+    "config.py": "559db1a19848fb61e958ff57622021774c75af2983df5c7389852f3398656457",
+    "content.py": "4f3b7f3631f4e70dd6452cec9f5496880cf1f685fcc795edf968141003d4d706",
+    "index.py": "32541e9bbd4bd178a79a48ebcfaf2871a39e376c8678dbc242de2715d0975b02",
+    "names.py": "e30bfa390a64a97928eacdeed87501f5c9ae2fa50ebf047abe95298ff681d25c",
+    "ntfs.py": "7ddbb132a410f7f84a0ed164ffcae41cb5ed3fb513fdf7421a7d48c91804c7a3",
+    "query.py": "b1f494401c70ed56a03644cb410e888e80b50df3436034a23a7b5b126a31c149",
+    "server.py": "c51b50c62722c75ef3e2f597c5d00cc82f25c6f0ab6d487d78b96d2e0d364685",
+    "storage.py": "12331410f2041c3f7364be78f965d2c2377698865ee01739d0cf5f6013357c38"
+  }
+}

@@ -1,0 +1,26 @@
+name: Build packages
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: "0.13.5"
+      - run: uv sync --frozen --extra dev
+      - run: uv build
+      - run: uv pip install --reinstall --no-deps dist/*.whl
+      - run: .venv/bin/python tests/live_smoke.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: pathgrove-packages
+          path: dist/

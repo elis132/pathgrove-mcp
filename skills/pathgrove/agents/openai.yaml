@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pathgrove"
+  short_description: "Search local files and their contents with MCP"
+  default_prompt: "Use $pathgrove to find the requested local files or text and report the search scope."

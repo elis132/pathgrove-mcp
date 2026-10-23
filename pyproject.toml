@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pathgrove-mcp"
+version = "0.1.0"
+description = "Independent local file index and fast search for AI agents over MCP"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+    { name = "elis132" },
+]
+keywords = [
+    "mcp", "local-search", "file-search", "content-search", "claude",
+    "codex", "gemini", "ai-agent", "model-context-protocol",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Filesystems",
+    "Typing :: Typed",
+]
+dependencies = [
+    "mcp>=1.26.0,<2",
+    "pydantic>=2.0.0",
+    "watchfiles>=1.1.0,<2",
+    "regex>=2025.11.3",
+    # cryptography 49 removed Intel macOS support (MCP's transitive dependency).
+    "cryptography<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+]
+
+[project.urls]
+Homepage = "https://github.com/elis132/pathgrove-mcp"
+Repository = "https://github.com/elis132/pathgrove-mcp"
+Issues = "https://github.com/elis132/pathgrove-mcp/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+pathgrove = "pathgrove_mcp:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pathgrove_mcp"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/pathgrove_mcp", "README.md", "LICENSE", "CHANGELOG.md", "AGENTS.md", "CLAUDE.md", "pyproject.toml", "uv.lock", "skills", "server.json", "docs", "scripts", "tests", ".claude-plugin"]
+
+# ── Testing ───────────────────────────────────────────────────────────────
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+# ── Linting ───────────────────────────────────────────────────────────────
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = ["E501"]  # line length handled by formatter
+
+[tool.ruff.lint.isort]
+known-first-party = ["pathgrove_mcp"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"skills/pathgrove/SKILL.md" = "pathgrove_mcp/skills/SKILL.md"

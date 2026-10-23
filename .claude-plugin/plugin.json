@@ -1,0 +1,15 @@
+{
+  "name": "pathgrove-mcp",
+  "displayName": "Pathgrove",
+  "description": "Local file and content search for AI agents on Windows, Linux and macOS",
+  "version": "0.1.0",
+  "author": {"name": "elis132"},
+  "license": "MIT",
+  "keywords": ["mcp", "file-search", "content-search", "local-search"],
+  "mcpServers": {
+    "pathgrove": {
+      "command": "uv",
+      "args": ["run", "--directory", "${CLAUDE_PLUGIN_ROOT}", "--frozen", "--no-dev", "pathgrove"]
+    }
+  }
+}

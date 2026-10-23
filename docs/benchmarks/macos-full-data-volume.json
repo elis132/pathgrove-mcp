@@ -1,0 +1,449 @@
+{
+  "kind": "actual MCP stdio; real filesystem traversal; no OS cache flush",
+  "platform": "Darwin",
+  "architecture": "arm64",
+  "python": "3.14.3",
+  "sqlite": "3.51.3",
+  "roots": [
+    "/System/Volumes/Data"
+  ],
+  "trials": 5,
+  "query_timeout_seconds": 10,
+  "sampled_peak_server_rss_bytes": 475627520,
+  "queries": [
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "invoice",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 133.325,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 64.617,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 64.309,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 64.402,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 64.191,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 64.402,
+      "first_ms": 133.325,
+      "max_ms": 133.325
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "invoice",
+        "sort": "date-modified-desc",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 62.875,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 62.881,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 62.763,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 62.692,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 62.943,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 62.875,
+      "first_ms": 62.875,
+      "max_ms": 62.943
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "in",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 2618.7,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 2545.185,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 2401.06,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 2500.182,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 2576.221,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 2545.185,
+      "first_ms": 2618.7,
+      "max_ms": 2618.7
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "o",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 6.649,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4.86,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4.694,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4.667,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4.738,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 4.738,
+      "first_ms": 6.649,
+      "max_ms": 6.649
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "ext:pdf",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 4.295,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4.087,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 3.95,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4.026,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 3.883,
+          "returned": 50,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 4.026,
+      "first_ms": 4.295,
+      "max_ms": 4.295
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "pathgrove-absent-959d6ea3a7a04011a5c478aa34962809",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 17.196,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 3.929,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 3.69,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 3.773,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "ms": 4.141,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "median_ms": 3.929,
+      "first_ms": 17.196,
+      "max_ms": 17.196
+    },
+    {
+      "tool": "pathgrove_search_content",
+      "params": {
+        "text": "pathgrove-absent-959d6ea3a7a04011a5c478aa34962809",
+        "extensions": [
+          "txt",
+          "md",
+          "py",
+          "ts",
+          "json"
+        ],
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 6513.346,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 5182.775,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 5169.38,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 5175.131,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 5183.921,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        }
+      ],
+      "median_ms": 5182.775,
+      "first_ms": 6513.346,
+      "max_ms": 6513.346
+    },
+    {
+      "tool": "pathgrove_search",
+      "params": {
+        "query": "ext:txt;md;py;ts;json content:pathgrove-absent-959d6ea3a7a04011a5c478aa34962809",
+        "sort": "name",
+        "max_results": 50
+      },
+      "samples": [
+        {
+          "ms": 10006.81,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10008.961,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10009.844,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10007.075,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        },
+        {
+          "ms": 10008.347,
+          "returned": 0,
+          "partial": true,
+          "budget_reached": true,
+          "error": false
+        }
+      ],
+      "median_ms": 10008.347,
+      "first_ms": 10006.81,
+      "max_ms": 10009.844
+    }
+  ],
+  "startup_ms": 315.382,
+  "first_searchable_seconds": 1.329,
+  "scan_seconds": 1029.47,
+  "scan_finished": true,
+  "status": {
+    "state": "ready",
+    "indexed_entries": 3986964,
+    "watching": true,
+    "scan_count": 1,
+    "skipped_entries": 253,
+    "partial": true,
+    "filename_memory_bytes": 130220240,
+    "candidate_cache_bytes": 0,
+    "has_error": false
+  },
+  "cache_bytes": 1268195328,
+  "cached_startup_ms": 1349.799,
+  "cached_first_query": {
+    "ms": 3613.51,
+    "returned": 50,
+    "partial": true,
+    "budget_reached": false,
+    "error": false
+  },
+  "measured_date": "2026-10-23",
+  "hardware": {
+    "cpu": "Apple M1",
+    "ram_bytes": 8589934592,
+    "os": "macOS 26.2",
+    "volume_capacity_bytes": 245107195904
+  },
+  "runtime_source_sha256_lf": {
+    "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
+    "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce",
+    "backend.py": "b11ea4d8ce82185fef7d0de9c83544a5173d159687f04e6ed50dca818928a7d6",
+    "config.py": "559db1a19848fb61e958ff57622021774c75af2983df5c7389852f3398656457",
+    "content.py": "4f3b7f3631f4e70dd6452cec9f5496880cf1f685fcc795edf968141003d4d706",
+    "index.py": "32541e9bbd4bd178a79a48ebcfaf2871a39e376c8678dbc242de2715d0975b02",
+    "names.py": "e30bfa390a64a97928eacdeed87501f5c9ae2fa50ebf047abe95298ff681d25c",
+    "ntfs.py": "7ddbb132a410f7f84a0ed164ffcae41cb5ed3fb513fdf7421a7d48c91804c7a3",
+    "query.py": "b1f494401c70ed56a03644cb410e888e80b50df3436034a23a7b5b126a31c149",
+    "server.py": "c51b50c62722c75ef3e2f597c5d00cc82f25c6f0ab6d487d78b96d2e0d364685",
+    "storage.py": "12331410f2041c3f7364be78f965d2c2377698865ee01739d0cf5f6013357c38"
+  }
+}

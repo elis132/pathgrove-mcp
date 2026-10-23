@@ -1,0 +1,15 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.elis132/pathgrove-mcp",
+  "title": "Pathgrove",
+  "description": "Local file indexing and text search for AI agents on Windows, Linux and macOS",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "pathgrove-mcp",
+      "version": "0.1.0",
+      "transport": {"type": "stdio"}
+    }
+  ]
+}
