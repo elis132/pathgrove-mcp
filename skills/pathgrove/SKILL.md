@@ -30,8 +30,8 @@ Ordinary terms search filenames, not contents. `in` matches adjacent letters any
 invoice !draft
 "annual report"
 ext:py;ts
-path:"D:\Projects" ext:pdf
-parent:"D:\Projects\demo"
+path:"/absolute/path/to/project" ext:pdf
+parent:"/absolute/path/to/project"
 folder: assets
 size:>10mb
 regex:^test_.*\.py$
@@ -59,7 +59,7 @@ For indexed candidates, use `pathgrove_search`:
 
 ```text
 ext:txt content:example-token-1234
-path:"D:\Projects" ext:py content:"exact phrase"
+path:"/absolute/path/to/project" ext:py content:"exact phrase"
 ext:txt case:content:Example ww:content:word
 ```
 
