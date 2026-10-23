@@ -24,7 +24,7 @@ cd pathgrove-mcp
 uv sync --frozen
 ```
 
-Add the checkout to your MCP client. Clients using a `mcpServers` JSON configuration can use this Windows example, which exposes two selected folders:
+Add the checkout to your MCP client. Clients using a `mcpServers` JSON configuration can use this template on Windows, Linux or macOS:
 
 ```json
 {
@@ -34,21 +34,21 @@ Add the checkout to your MCP client. Clients using a `mcpServers` JSON configura
       "args": [
         "run",
         "--directory",
-        "D:\\Dev\\pathgrove-mcp",
+        "<ABSOLUTE_CHECKOUT_PATH>",
         "--frozen",
         "pathgrove"
       ],
       "env": {
-        "PATHGROVE_ROOTS": "[\"C:\\\\Users\\\\YourName\\\\Documents\", \"D:\\\\Projects\"]"
+        "PATHGROVE_ROOTS": "[\"<ABSOLUTE_SEARCH_ROOT>\"]"
       }
     }
   }
 }
 ```
 
-Replace the checkout path and roots with your own. On macOS, use paths such as `/Users/you/projects`; on Linux, `/home/you/projects`. For example, the POSIX environment value is `"PATHGROVE_ROOTS": "[\"/Users/you/projects\"]"`. If the client cannot find `uv`, use its absolute executable path.
+Replace both placeholders before starting the client. `<ABSOLUTE_CHECKOUT_PATH>` is the directory you cloned; `<ABSOLUTE_SEARCH_ROOT>` is an existing directory you want to search. Use your own absolute paths, for example `C:/path/to/documents` on Windows or `/absolute/path/to/documents` on Linux/macOS. Forward slashes also work on Windows and avoid nested backslash escaping. `PATHGROVE_ROOTS` is a JSON-encoded array, so you can add more roots inside that array. If the client cannot find `uv`, use its absolute executable path.
 
-For whole Windows drives, the JSON environment value is `"PATHGROVE_ROOTS": "[\"C:\\\\\", \"D:\\\\\"]"`. Without `PATHGROVE_ROOTS`, only the current user's home directory is indexed.
+If you choose to index entire Windows drives, an example environment value is `"PATHGROVE_ROOTS": "[\"C:/\", \"D:/\"]"`; select the drive letters that actually exist on your computer. Without `PATHGROVE_ROOTS`, only the current user's home directory is indexed.
 
 You can also start the server with `uv run --frozen pathgrove`, the installed `pathgrove` command or `python -m pathgrove_mcp`. It waits for an MCP client on stdin/stdout; it is not an interactive terminal prompt. Logs go to stderr.
 
@@ -73,8 +73,8 @@ The `pathgrove://status` resource exposes the same health information. Raw MCP c
 | `invoice !draft` | Names containing `invoice` but not `draft` |
 | `"annual report"` | A literal phrase in the name |
 | `ext:pdf;txt` | PDF or text files |
-| `path:"D:\Projects" ext:py` | Python files whose full path contains the supplied text |
-| `parent:"D:\Projects\demo"` | Entries immediately inside that directory |
+| `path:"/absolute/path/to/project" ext:py` | Python files whose full path contains the supplied text |
+| `parent:"/absolute/path/to/project"` | Entries immediately inside that directory |
 | `folder:assets` | Directories with `assets` in their name |
 | `size:>10mb` | Files larger than 10 MiB |
 | `dm:last7days` | Files modified in the last seven days |
@@ -129,6 +129,14 @@ PDF/Word extraction, archive extraction and OCR are not included. Detected binar
 ## Performance
 
 Measurements use real volumes and actual MCP stdio calls. The comparison checks identical ordered result pages before calculating speed-ups; indexing, startup and individual request timings are reported separately.
+
+### Windows indexing improvements and estimated completion
+
+Transactional counters, nonblocking filename-cache fallback and a shared query deadline improve indexing and responsiveness. A one-million-entry synthetic indexing run took **114 seconds versus 151 seconds**, about **24% less time**. On the real 4.79-million-entry metadata cache, count refresh fell from **734 ms to 0.054 ms**; this ratio applies to the counter operation, not the entire scan.
+
+**Windows full-drive planning guess: approximately 75 minutes for the measured C: + D: scope of 7.94 million entries.** This is a calibrated simulation, not a completed full-drive run of the optimized version. An optimistic synthetic extrapolation gives about 19 minutes and a quadratic scenario about 124 minutes. See [measurements, assumptions, raw data and reproduction](docs/WINDOWS-ESTIMATE.md).
+
+The full-volume tables below describe the earlier baseline, before these indexing/deadline changes. Their source identities are preserved in the reports.
 
 ### Indexed filename search versus a fresh scan
 

@@ -39,6 +39,20 @@ CREATE INDEX IF NOT EXISTS files_name ON files(name_fold,id);
 CREATE INDEX IF NOT EXISTS files_extension ON files(extension_fold,name_fold,id);
 CREATE INDEX IF NOT EXISTS files_modified ON files(modified,id);
 CREATE INDEX IF NOT EXISTS files_size ON files(size,id);
+CREATE TABLE IF NOT EXISTS root_counts(root TEXT PRIMARY KEY, entries INTEGER NOT NULL CHECK(entries>=0));
+CREATE TRIGGER IF NOT EXISTS root_counts_ai AFTER INSERT ON files BEGIN
+ INSERT INTO root_counts VALUES((SELECT root FROM locations WHERE id=new.location_id),1)
+ ON CONFLICT(root) DO UPDATE SET entries=entries+1;
+END;
+CREATE TRIGGER IF NOT EXISTS root_counts_ad AFTER DELETE ON files BEGIN
+ UPDATE root_counts SET entries=entries-1 WHERE root=(SELECT root FROM locations WHERE id=old.location_id);
+END;
+CREATE TRIGGER IF NOT EXISTS root_counts_au AFTER UPDATE OF location_id ON files
+WHEN old.location_id IS NOT new.location_id BEGIN
+ UPDATE root_counts SET entries=entries-1 WHERE root=(SELECT root FROM locations WHERE id=old.location_id);
+ INSERT INTO root_counts VALUES((SELECT root FROM locations WHERE id=new.location_id),1)
+ ON CONFLICT(root) DO UPDATE SET entries=entries+1;
+END;
 CREATE TABLE IF NOT EXISTS name_blocks(block INTEGER PRIMARY KEY, revision INTEGER NOT NULL);
 CREATE TRIGGER IF NOT EXISTS files_ai AFTER INSERT ON files BEGIN
  INSERT INTO name_blocks VALUES(new.id/{BLOCK_SIZE},1)
@@ -82,7 +96,7 @@ END;
 CREATE TRIGGER IF NOT EXISTS entries_generation INSTEAD OF UPDATE OF generation ON entries BEGIN
  UPDATE files SET generation=new.generation WHERE id=old.id;
 END;
-PRAGMA user_version=2;
+PRAGMA user_version=3;
 """
 
 
@@ -103,7 +117,22 @@ def initialize(connection: sqlite3.Connection) -> None:
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name='entries'"
     ).fetchone()
     if not legacy:
-        connection.executescript(schema())
+        counters = connection.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='root_counts'"
+        ).fetchone()
+        backfill = (
+            ""
+            if counters
+            else """
+INSERT INTO root_counts SELECT p.root,COUNT(*) FROM files f
+JOIN locations p ON p.id=f.location_id GROUP BY p.root;
+"""
+        )
+        try:
+            connection.executescript("BEGIN IMMEDIATE;\n" + schema() + backfill + "COMMIT;")
+        except BaseException:
+            connection.rollback()
+            raise
         return
     # A single explicit transaction prevents a half-migrated cache after failure.
     connection.executescript("BEGIN IMMEDIATE; ALTER TABLE entries RENAME TO legacy_entries;")

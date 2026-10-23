@@ -121,6 +121,14 @@ class CompactNames:
         with self._lock:
             return sum(len(value) for value in self._candidates.values() if value is not None)
 
+    def metrics(self):
+        if not self._lock.acquire(blocking=False):
+            return None
+        try:
+            return self.bytes_used, self.candidate_cache_bytes
+        finally:
+            self._lock.release()
+
     @property
     def bytes_used(self):
         with self._lock:

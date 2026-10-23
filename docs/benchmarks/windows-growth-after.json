@@ -1,0 +1,52 @@
+{
+  "kind": "synthetic SQLite metadata; excludes real filesystem discovery",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.11",
+  "sqlite": "3.49.1",
+  "batch_size": 256,
+  "files_per_directory": 64,
+  "complete": true,
+  "runtime_source_sha256_lf": {
+    "backend.py": "b7de00d11102fb6b183e8a81b0c81c2119752e45e14275ddf64f210501abe71b",
+    "config.py": "559db1a19848fb61e958ff57622021774c75af2983df5c7389852f3398656457",
+    "content.py": "4f3b7f3631f4e70dd6452cec9f5496880cf1f685fcc795edf968141003d4d706",
+    "index.py": "7efe93f2bf62a57e4c2e1c6885a121ca70d4b82e850c49b94d725da7fd54a985",
+    "names.py": "8391cd2d64028e3f7e71cce6c91fdc3152637b8aac3807c86d5ff29bda5b6a3d",
+    "ntfs.py": "7ddbb132a410f7f84a0ed164ffcae41cb5ed3fb513fdf7421a7d48c91804c7a3",
+    "query.py": "b1f494401c70ed56a03644cb410e888e80b50df3436034a23a7b5b126a31c149",
+    "server.py": "c51b50c62722c75ef3e2f597c5d00cc82f25c6f0ab6d487d78b96d2e0d364685",
+    "storage.py": "683a2ab81cd8c14486b12e2079e4719f506535007e94b3a43f471d2aeab0571a",
+    "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
+    "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce"
+  },
+  "samples": [
+    {
+      "entries": 100000,
+      "seconds": 11.298264,
+      "count_calls": 96,
+      "count_seconds": 0.003006,
+      "snapshot_seconds": 4.200646
+    },
+    {
+      "entries": 250000,
+      "seconds": 26.154279,
+      "count_calls": 222,
+      "count_seconds": 0.006765,
+      "snapshot_seconds": 10.020484
+    },
+    {
+      "entries": 500000,
+      "seconds": 57.221898,
+      "count_calls": 475,
+      "count_seconds": 0.017057,
+      "snapshot_seconds": 21.964149
+    },
+    {
+      "entries": 1000000,
+      "seconds": 114.415854,
+      "count_calls": 949,
+      "count_seconds": 0.034262,
+      "snapshot_seconds": 43.17374
+    }
+  ]
+}

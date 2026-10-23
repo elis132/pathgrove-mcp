@@ -14,6 +14,14 @@ Ruff check/format, the actual MCP stdio smoke and wheel/source-package builds pa
 
 ## Coverage
 
+### Indexing and deadline follow-up
+
+The optimized source passed **204 tests, 5 skipped** on Windows Python 3.12 and **207 tests, 2 skipped** on the physical M1 Mac mini with Python 3.14. Both actual MCP stdio smokes passed; the Mac used a freshly built and installed wheel. Whole-volume latency results above predate this follow-up.
+
+Nine new regression cases cover count-refresh work independent of file count, schema-2 backfill, repeated upserts, transactional rollback, cross-root moves, shared-cache writers, busy-cache SQL/status behavior, fallback deadlines, worker slots after timeouts, shared queue/execution budgets and the growth-model helper. The existing candidate-plan test now explicitly owns the cache lock when testing its available-cache path; separate contention tests require the SQL fallback.
+
+Windows synthetic growth and real-cache count-refresh measurements are separate from the modeled completion time in [WINDOWS-ESTIMATE.md](WINDOWS-ESTIMATE.md). No completed optimized Windows full-drive run is claimed. MCP configuration examples use explicit user-supplied placeholders; the JSON template and nested roots array were parsed successfully.
+
 ### Comparative benchmark follow-up
 
 The comparison benchmark adds six tests. Windows Python 3.12 passed the full suite with **195 passed, 5 skipped**, plus Ruff check/format, the actual MCP stdio smoke and wheel/source-package builds. [CI for the benchmark implementation](https://github.com/elis132/pathgrove-mcp/actions/runs/40003265339) passed all eight platform/Python combinations and lint; [the package workflow](https://github.com/elis132/pathgrove-mcp/actions/runs/40003265239) also passed.

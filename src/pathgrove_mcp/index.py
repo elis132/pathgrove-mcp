@@ -161,6 +161,7 @@ class LocalIndex:
         self._skipped = 0
         self._backend = "packed filename memory index + compact SQLite metadata"
         self._names = CompactNames(self.roots)
+        self._query_context = threading.local()
         self._parent_ids = {}
         self._indexed_entries = 0
         self._last_count_refresh = 0.0
@@ -437,7 +438,7 @@ class LocalIndex:
     def _refresh_count(self):
         with self._write_lock:
             self._indexed_entries = self._writer.execute(
-                "SELECT COUNT(*) FROM entries WHERE root IN ("
+                "SELECT COALESCE(SUM(entries),0) FROM root_counts WHERE root IN ("
                 + ",".join("?" for _ in self.roots)
                 + ")",
                 self.roots,
@@ -535,12 +536,18 @@ class LocalIndex:
     def _connect(self, timeout: float):
         if self._stop.is_set():
             raise RuntimeError("Index is closed")
-        connection = sqlite3.connect(self.db_path, timeout=max(0.01, min(timeout, 30)))
+        deadline = min(
+            time.monotonic() + max(0.001, timeout),
+            getattr(self._query_context, "deadline", float("inf")),
+        )
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise QueryError("Query exceeded its time limit")
+        connection = sqlite3.connect(self.db_path, timeout=min(remaining, 30))
         connection.row_factory = sqlite3.Row
         register_functions(connection)
         connection.execute("PRAGMA query_only=ON")
         connection.execute("PRAGMA case_sensitive_like=ON")
-        deadline = time.monotonic() + max(0.001, timeout)
         connection.set_progress_handler(lambda: int(time.monotonic() > deadline), 1000)
         patterns = {}
 
@@ -662,7 +669,26 @@ class LocalIndex:
             ORDER BY selected.sort_key {direction},selected.path_key {direction},selected.id {direction}"""
         return sql, parameters + (max_results, offset)
 
-    def search(
+    @contextlib.contextmanager
+    def _request(self, timeout, deadline=None):
+        previous = getattr(self._query_context, "deadline", float("inf"))
+        self._query_context.deadline = min(
+            previous, time.monotonic() + timeout, deadline if deadline is not None else float("inf")
+        )
+        owned = self._names._lock.acquire(blocking=False)
+        try:
+            yield owned
+        finally:
+            if owned:
+                self._names._lock.release()
+            self._query_context.deadline = previous
+
+    def search(self, query="", *, timeout=5.0, deadline=None, **kwargs):
+        with self._request(timeout, deadline) as available:
+            kwargs["use_candidates"] = available and kwargs.get("use_candidates", True)
+            return self._search(query, timeout=timeout, **kwargs)
+
+    def _search(
         self,
         query: str = "",
         *,
@@ -708,7 +734,9 @@ class LocalIndex:
         ordered_sql, ordered_parameters = self._search_statement(
             query, sort, descending, max_results, offset, ordered_short_query=True, **flags
         )
-        adaptive = "FROM name_ordered_entries e" in ordered_sql
+        adaptive = (
+            flags.get("use_candidates", True) and "FROM name_ordered_entries e" in ordered_sql
+        )
         try:
             rows = self._execute(
                 sql,
@@ -774,11 +802,15 @@ class LocalIndex:
         rows = []
         matches = 0
         scanner = content.ContentScanner(
-            plan.terms, self.roots, time.monotonic() + timeout, self._stop
+            plan.terms,
+            self.roots,
+            min(time.monotonic() + timeout, getattr(self._query_context, "deadline", float("inf"))),
+            self._stop,
         )
         if max_results:
-            connection = self._connect(timeout)
+            connection = None
             try:
+                connection = self._connect(timeout)
                 connection.execute("BEGIN")
                 for row in connection.execute(sql, parameters):
                     if scanner.matches(row["full_path"]):
@@ -789,12 +821,16 @@ class LocalIndex:
                             break
             except content.ContentBudgetExceeded as exc:
                 notes.append(f"Content search budget reached: {exc}.")
-            except sqlite3.OperationalError as exc:
-                if "interrupted" not in str(exc) and "user-defined function" not in str(exc):
+            except (sqlite3.OperationalError, QueryError) as exc:
+                if not any(
+                    term in str(exc)
+                    for term in ("interrupted", "user-defined function", "time limit")
+                ):
                     raise
                 notes.append("Content search budget reached while selecting candidate files.")
             finally:
-                connection.close()
+                if connection is not None:
+                    connection.close()
         if scanner.skipped:
             notes.append(
                 f"Skipped {scanner.skipped:,} files: binary/unsupported encoding, inaccessible, "
@@ -809,6 +845,8 @@ class LocalIndex:
         return SearchPage(self._format_rows(rows), partial=partial, note=" ".join(notes))
 
     def _bounded_search(self, query, sort, descending, max_results, offset, timeout, **flags):
+        if time.monotonic() >= getattr(self._query_context, "deadline", float("inf")):
+            return []
         where, parameters = self._where(query, **{**flags, "use_candidates": False})
         connection = self._connect(timeout)
         rows = []
@@ -844,21 +882,29 @@ class LocalIndex:
         )
         return rows[offset : offset + max_results]
 
-    def count(self, query: str = "", *, timeout: float = 5.0, **flags) -> int:
-        where, parameters, uses_candidates = self._where(query, include_candidates=True, **flags)
-        table = "candidate_entries" if uses_candidates else "entries"
-        return self._execute(f"SELECT COUNT(*) FROM {table} e WHERE {where}", parameters, timeout)[
-            0
-        ][0]
+    def count(self, query: str = "", *, timeout: float = 5.0, deadline=None, **flags) -> int:
+        with self._request(timeout, deadline) as available:
+            flags["use_candidates"] = available and flags.get("use_candidates", True)
+            where, parameters, uses_candidates = self._where(
+                query, include_candidates=True, **flags
+            )
+            table = "candidate_entries" if uses_candidates else "entries"
+            return self._execute(
+                f"SELECT COUNT(*) FROM {table} e WHERE {where}", parameters, timeout
+            )[0][0]
 
-    def sum_size(self, query: str = "", *, timeout: float = 5.0, **flags) -> int:
-        where, parameters, uses_candidates = self._where(query, include_candidates=True, **flags)
-        table = "candidate_entries" if uses_candidates else "entries"
-        return self._execute(
-            f"SELECT COALESCE(SUM(e.size),0) FROM {table} e WHERE e.is_directory=0 AND {where}",
-            parameters,
-            timeout,
-        )[0][0]
+    def sum_size(self, query: str = "", *, timeout: float = 5.0, deadline=None, **flags) -> int:
+        with self._request(timeout, deadline) as available:
+            flags["use_candidates"] = available and flags.get("use_candidates", True)
+            where, parameters, uses_candidates = self._where(
+                query, include_candidates=True, **flags
+            )
+            table = "candidate_entries" if uses_candidates else "entries"
+            return self._execute(
+                f"SELECT COALESCE(SUM(e.size),0) FROM {table} e WHERE e.is_directory=0 AND {where}",
+                parameters,
+                timeout,
+            )[0][0]
 
     def explain(
         self,
@@ -886,6 +932,7 @@ class LocalIndex:
         return plan
 
     def status(self) -> dict:
+        metrics = self._names.metrics()
         return dict(
             state=self._state,
             indexed_entries=self._indexed_entries,
@@ -897,8 +944,9 @@ class LocalIndex:
             scan_count=self._scan_count,
             event_count=self._event_count,
             skipped_entries=self._skipped,
-            filename_memory_bytes=self._names.bytes_used,
-            candidate_cache_bytes=self._names.candidate_cache_bytes,
+            filename_memory_bytes=metrics[0] if metrics is not None else None,
+            candidate_cache_bytes=metrics[1] if metrics is not None else None,
+            memory_metrics_available=metrics is not None,
             partial=self._state != "ready" or self._coverage_incomplete,
             coverage_note=self._coverage_note,
         )

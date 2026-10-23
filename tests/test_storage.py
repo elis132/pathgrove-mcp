@@ -96,7 +96,7 @@ async def test_legacy_cache_migrates_without_losing_rows_or_generations(tmp_path
             "original",
         )
         assert index._writer.execute("SELECT scanned FROM roots").fetchone()[0] == 1234
-        assert index._writer.execute("PRAGMA user_version").fetchone()[0] == 2
+        assert index._writer.execute("PRAGMA user_version").fetchone()[0] == 3
         assert (
             index._writer.execute("SELECT type FROM sqlite_master WHERE name='entries'").fetchone()[
                 0

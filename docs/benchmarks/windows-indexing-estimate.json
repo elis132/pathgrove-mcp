@@ -1,0 +1,53 @@
+{
+  "kind": "ESTIMATE / SIMULATION: not a completed Windows whole-drive run",
+  "measured_date": "2026-10-23",
+  "target_entries": 7940100,
+  "old_observed_anchor": {
+    "seconds": 7200.333,
+    "entries": 4756213,
+    "scan_finished": false
+  },
+  "old_observed_progress_scenarios_seconds": {
+    "constant_rate": 12020.354,
+    "quadratic_growth": 20066.976
+  },
+  "before_synthetic": {
+    "target_entries": 7940100,
+    "traversal_proxy_seconds": 221.644851,
+    "linear_scenario_seconds": 1422.401,
+    "quadratic_scenario_seconds": 9755.767,
+    "fitted_scenario_seconds": 3963.951,
+    "warning": "Synthetic metadata extrapolation plus a filename-traversal proxy; not a measured whole-drive completion or a statistical confidence interval."
+  },
+  "after_synthetic": {
+    "target_entries": 7940100,
+    "traversal_proxy_seconds": 221.644851,
+    "linear_scenario_seconds": 1130.118,
+    "quadratic_scenario_seconds": 7435.014,
+    "fitted_scenario_seconds": 1130.118,
+    "warning": "Synthetic metadata extrapolation plus a filename-traversal proxy; not a measured whole-drive completion or a statistical confidence interval."
+  },
+  "historical_calibration_factor": 4.665694,
+  "calibrated_planning_estimate_seconds": 4460.302,
+  "calibration_assumption": "Apply the historical real-scan/synthetic-insertion gap to the optimized synthetic fit. This transfer is unvalidated and may overestimate overhead removed by the fix.",
+  "limitations": [
+    "One synthetic growth run per version; no real file traversal, watcher work or protected-subtree handling in those runs.",
+    "Prediction extrapolates from one million synthetic entries to about eight million real entries.",
+    "No OS cache flush; normal active machine; directory distribution, names and filesystem permissions differ.",
+    "Scenarios are not confidence intervals, deadlines or guarantees."
+  ],
+  "baseline_source_commit": "1460ce942f6ccc18d197c10eaec63293916baaf3",
+  "runtime_source_sha256_lf": {
+    "backend.py": "b7de00d11102fb6b183e8a81b0c81c2119752e45e14275ddf64f210501abe71b",
+    "config.py": "559db1a19848fb61e958ff57622021774c75af2983df5c7389852f3398656457",
+    "content.py": "4f3b7f3631f4e70dd6452cec9f5496880cf1f685fcc795edf968141003d4d706",
+    "index.py": "7efe93f2bf62a57e4c2e1c6885a121ca70d4b82e850c49b94d725da7fd54a985",
+    "names.py": "8391cd2d64028e3f7e71cce6c91fdc3152637b8aac3807c86d5ff29bda5b6a3d",
+    "ntfs.py": "7ddbb132a410f7f84a0ed164ffcae41cb5ed3fb513fdf7421a7d48c91804c7a3",
+    "query.py": "b1f494401c70ed56a03644cb410e888e80b50df3436034a23a7b5b126a31c149",
+    "server.py": "c51b50c62722c75ef3e2f597c5d00cc82f25c6f0ab6d487d78b96d2e0d364685",
+    "storage.py": "683a2ab81cd8c14486b12e2079e4719f506535007e94b3a43f471d2aeab0571a",
+    "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
+    "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce"
+  }
+}

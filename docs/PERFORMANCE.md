@@ -2,6 +2,8 @@
 
 This report measures real filesystem discovery and actual MCP stdio calls. It does not substitute synthetic SQLite insertion timings for a disk scan.
 
+These whole-volume results predate the transactional-count and deadline improvements. [WINDOWS-ESTIMATE.md](WINDOWS-ESTIMATE.md) reports the optimized microbenchmarks and a clearly labeled simulation of Windows completion time; it does not claim a new completed disk scan.
+
 For the separate comparison of indexed filename searches against independent repeated filesystem traversal, including result-equality checks and speed-up ratios, see [COMPARISON.md](COMPARISON.md).
 
 ## Method

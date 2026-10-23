@@ -2,6 +2,8 @@
 
 This comparison answers a specific question: how much time does a reusable Pathgrove filename index save over independently walking the same real filesystem for each search?
 
+These measurements use the earlier server baseline. Subsequent indexing/deadline changes and the modeled Windows completion time are reported separately in [WINDOWS-ESTIMATE.md](WINDOWS-ESTIMATE.md).
+
 It is **not** a before/after comparison of Pathgrove versions, or a benchmark against Everything, Spotlight, `find`, `fd`, `ripgrep` or another MCP server. The baseline is the independent Python standard-library scanner included in [benchmark_compare.py](../scripts/benchmark_compare.py).
 
 ## Equal work and correctness

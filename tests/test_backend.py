@@ -1,4 +1,5 @@
 import asyncio
+import threading
 import time
 
 import pytest
@@ -82,6 +83,52 @@ async def test_query_timeout_reports_clear_error(backend, monkeypatch):
         await backend.search("anything")
 
 
+async def test_timed_out_worker_keeps_its_slot_until_it_finishes(backend, monkeypatch):
+    release = threading.Event()
+    backend.config.timeout = 0.03
+    backend._queries = asyncio.Semaphore(1)
+
+    def blocked(*args, **kwargs):
+        release.wait(2)
+        return 1
+
+    monkeypatch.setattr(backend.index, "count", blocked)
+    try:
+        with pytest.raises(RuntimeError, match="query exceeded"):
+            await backend.count("anything")
+        assert backend._queries.locked()
+        with pytest.raises(RuntimeError, match="queue timed out"):
+            await backend.count("anything")
+    finally:
+        release.set()
+        for _ in range(100):
+            if not backend._queries.locked():
+                break
+            await asyncio.sleep(0.01)
+        assert not backend._queries.locked()
+
+
+async def test_queue_and_execution_share_one_budget(backend, monkeypatch):
+    backend.config.timeout = 0.3
+    backend._queries = asyncio.Semaphore(0)
+    observed = {}
+
+    def record(query, **kwargs):
+        observed.update(kwargs)
+        return 1
+
+    async def unblock():
+        await asyncio.sleep(0.1)
+        backend._queries.release()
+
+    monkeypatch.setattr(backend.index, "count", record)
+    unblocking = asyncio.create_task(unblock())
+    assert await backend.count("anything") == 1
+    await unblocking
+    assert 0 < observed["timeout"] < 0.25
+    assert observed["deadline"] > time.monotonic() - 0.1
+
+
 async def test_cached_results_available_while_reconciling(backend, monkeypatch):
     status = backend.index.status()
     monkeypatch.setattr(backend.index, "status", lambda: {**status, "state": "building"})
@@ -129,8 +176,8 @@ async def test_start_and_query_need_no_external_process(valid_config, monkeypatc
 
 
 def test_builders_and_result_format():
-    assert build_type_query("code", "main", "D:/Dev").startswith("ext:")
-    assert 'path:"D:/Dev"' in build_type_query("code", "main", "D:/Dev")
+    assert build_type_query("code", "main", "C:/example/project").startswith("ext:")
+    assert 'path:"C:/example/project"' in build_type_query("code", "main", "C:/example/project")
     assert build_recent_query("1hour", "", ".py, .txt") == "dm:last1hours ext:py;txt"
     with pytest.raises(ValueError):
         build_type_query("unknown")

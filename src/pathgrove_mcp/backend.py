@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import threading
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -131,24 +132,37 @@ class SearchBackend:
         return self.index
 
     async def _query(self, method: str, query: str, **kwargs):
+        deadline = time.monotonic() + self.config.timeout
         index = await self._ready_index()
         try:
-            await asyncio.wait_for(self._queries.acquire(), self.config.timeout)
+            await asyncio.wait_for(self._queries.acquire(), max(0, deadline - time.monotonic()))
         except TimeoutError as exc:
             raise RuntimeError("Local index query queue timed out; retry shortly.") from exc
+
+        def completed(task):
+            self._queries.release()
+            if not task.cancelled():
+                task.exception()
+
+        worker = asyncio.create_task(
+            asyncio.to_thread(
+                getattr(index, method),
+                query,
+                timeout=max(0, deadline - time.monotonic()),
+                deadline=deadline,
+                **kwargs,
+            )
+        )
+        worker.add_done_callback(completed)
         try:
             return await asyncio.wait_for(
-                asyncio.to_thread(
-                    getattr(index, method), query, timeout=self.config.timeout, **kwargs
-                ),
-                self.config.timeout + 0.25,
+                asyncio.shield(worker),
+                max(0, deadline - time.monotonic()) + 0.25,
             )
         except TimeoutError as exc:
             raise RuntimeError(
                 f"Local index query exceeded {self.config.timeout:g} seconds; narrow the query."
             ) from exc
-        finally:
-            self._queries.release()
 
     async def search(
         self,

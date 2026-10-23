@@ -1,0 +1,38 @@
+{
+  "kind": "real metadata count-refresh microbenchmark; excludes traversal, MCP and insertion",
+  "measured_date": "2026-10-23",
+  "entries": 4793676,
+  "isolated_copy_migration_seconds": 0.872,
+  "before_samples_ms": [
+    653.7083,
+    734.0965,
+    802.0627
+  ],
+  "after_samples_ms": [
+    0.0854,
+    0.0535,
+    0.0538
+  ],
+  "before_median_ms": 734.0965,
+  "after_median_ms": 0.0538,
+  "count_refresh_speedup": 13644.93,
+  "baseline_sql": "SELECT COUNT(*) FROM entries WHERE root IN (?,?)",
+  "optimized_sql": "SELECT COALESCE(SUM(entries),0) FROM root_counts WHERE root IN (?,?)",
+  "roots": [
+    "C:\\",
+    "D:\\"
+  ],
+  "runtime_source_sha256_lf": {
+    "backend.py": "b7de00d11102fb6b183e8a81b0c81c2119752e45e14275ddf64f210501abe71b",
+    "config.py": "559db1a19848fb61e958ff57622021774c75af2983df5c7389852f3398656457",
+    "content.py": "4f3b7f3631f4e70dd6452cec9f5496880cf1f685fcc795edf968141003d4d706",
+    "index.py": "7efe93f2bf62a57e4c2e1c6885a121ca70d4b82e850c49b94d725da7fd54a985",
+    "names.py": "8391cd2d64028e3f7e71cce6c91fdc3152637b8aac3807c86d5ff29bda5b6a3d",
+    "ntfs.py": "7ddbb132a410f7f84a0ed164ffcae41cb5ed3fb513fdf7421a7d48c91804c7a3",
+    "query.py": "b1f494401c70ed56a03644cb410e888e80b50df3436034a23a7b5b126a31c149",
+    "server.py": "c51b50c62722c75ef3e2f597c5d00cc82f25c6f0ab6d487d78b96d2e0d364685",
+    "storage.py": "683a2ab81cd8c14486b12e2079e4719f506535007e94b3a43f471d2aeab0571a",
+    "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
+    "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce"
+  }
+}

@@ -6,9 +6,13 @@ Pathgrove is a headless Python MCP server over stdin/stdout. `IndexConfig` defin
 
 SQLite normalizes parent directories into `locations`; compact file rows store names and metadata. Generated columns/views provide folded names and full paths. WAL permits independent readers, and a process lock coordinates complete scan generations.
 
+Schema 3 maintains `root_counts` in the same transaction as file inserts, deletes and location moves. A one-time atomic backfill migrates existing caches. Progress refresh sums the configured roots' counters; filtered aggregate tools still execute exact snapshot queries.
+
 Casefolded UTF-8 names are packed into blocks of 4,096 IDs. Native `bytes.find` supplies candidate IDs for exact SQL filters and ordering. Blocks carry transactional revisions so writes from another process invalidate stale buffers. A small revision-keyed LRU retains only bounded candidate lists.
 
 Broad single-letter name queries use an adaptive plan: collect at most 4,097 candidates, then traverse the filename B-tree in order if a term is broad. General searches reserve a fraction of the query budget for a fallback over at most 50,000 rows. Fallback pages explicitly label subset coverage and pagination.
+
+Indexed queries and aggregates bypass packed-name candidates when the cache lock is busy. Optional memory diagnostics return `null` with `memory_metrics_available: false` in that case. Queueing and SQL phases share one absolute deadline. A caller timing out does not free its worker slot until the underlying thread finishes. Deadlines remain cooperative for filesystem reads.
 
 ## Scanning and freshness
 

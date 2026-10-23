@@ -726,8 +726,10 @@ async def test_packed_aggregates_use_candidate_rowids(indexed, monkeypatch):
     monkeypatch.setattr(index, "_execute", capture)
     rows = index.search("alpha")
     plans.clear()
-    assert index.count("alpha") == len(rows)
-    assert index.sum_size("alpha") == sum(row["size"] for row in rows)
+    # Candidate plans are used when the cache is available; the watcher may load it.
+    with index._names._lock:
+        assert index.count("alpha") == len(rows)
+        assert index.sum_size("alpha") == sum(row["size"] for row in rows)
     for plan in plans:
         assert any("json_each VIRTUAL TABLE INDEX" in line for line in plan)
         assert any("SEARCH f USING INTEGER PRIMARY KEY (rowid=?)" in line for line in plan)

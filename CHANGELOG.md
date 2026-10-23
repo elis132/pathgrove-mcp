@@ -2,6 +2,12 @@
 
 ## 0.1.0 — Unreleased
 
+- Exact transactional per-root counters and atomic migration of existing metadata caches.
+- Nonblocking cache-contention fallback, status metrics and shared query deadlines.
+- Worker concurrency remains bounded after caller timeouts.
+- Synthetic Windows growth measurements and explicitly labeled completion estimates.
+- Portable MCP configuration templates with user-supplied absolute paths.
+
 - Persistent SQLite filename and metadata index with incremental first-run batches.
 - Packed Unicode filename search, metadata filters, stable sorting and pagination.
 - Live filesystem updates and startup reconciliation.
