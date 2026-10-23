@@ -7,6 +7,7 @@ permissions:
   contents: read
 jobs:
   build:
+    timeout-minutes: 10
     runs-on: ubicloud-standard-2
     steps:
       - uses: actions/checkout@v7

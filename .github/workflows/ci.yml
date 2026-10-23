@@ -6,6 +6,7 @@ permissions:
   contents: read
 jobs:
   test:
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -21,9 +22,10 @@ jobs:
         with:
           version: "0.13.5"
       - run: uv sync --frozen --extra dev --python "${{ matrix.python-version }}"
-      - run: uv run --frozen --extra dev pytest -q
+      - run: uv run --frozen --extra dev pytest -v -o faulthandler_timeout=60
       - run: uv run --frozen --extra dev python tests/live_smoke.py
   lint:
+    timeout-minutes: 10
     runs-on: ubicloud-standard-2
     steps:
       - uses: actions/checkout@v7
