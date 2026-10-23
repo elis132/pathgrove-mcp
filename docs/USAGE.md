@@ -123,4 +123,3 @@ uv build
 See [architecture](ARCHITECTURE.md), [validation evidence](VALIDATION.md) and [the changelog](../CHANGELOG.md). Tests use isolated fixtures. CI covers Windows, Linux and macOS with Python 3.10 and 3.14; the package workflow builds archives and runs the MCP smoke against the installed wheel.
 
 Linux tests, lint and package builds run on Ubicloud using `ubicloud-standard-2`. Windows and macOS tests use their native GitHub-hosted runners. To run the Linux jobs in your own fork, connect that repository to the Ubicloud Managed Runners app as described in [Ubicloud's setup guide](https://www.ubicloud.com/docs/github-actions-integration/quickstart).
-
