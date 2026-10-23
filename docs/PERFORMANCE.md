@@ -2,6 +2,8 @@
 
 This report measures real filesystem discovery and actual MCP stdio calls. It does not substitute synthetic SQLite insertion timings for a disk scan.
 
+For the separate comparison of indexed filename searches against independent repeated filesystem traversal, including result-equality checks and speed-up ratios, see [COMPARISON.md](COMPARISON.md).
+
 ## Method
 
 - Use a new private SQLite cache for each machine's run. No previous metadata index is reused for the initial scan.

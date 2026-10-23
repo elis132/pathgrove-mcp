@@ -1,0 +1,173 @@
+{
+  "kind": "cached MCP stdio vs independent fresh os.scandir per query",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "architecture": "AMD64",
+  "python": "3.12.11",
+  "sqlite": "3.49.1",
+  "roots": [
+    "C:\\",
+    "D:\\"
+  ],
+  "trials": 1,
+  "query_timeout_seconds": 10,
+  "snapshot_mode": "SQLite backup; reconciliation/watchers disabled in benchmark only",
+  "os_cache_flushed": false,
+  "queries": [
+    {
+      "query": "invoice",
+      "sort": "name",
+      "first_query_ms": 6557.439,
+      "first_query_flags": {
+        "budget_reached": true,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 383265.192,
+          "mcp_ms": 1386.102,
+          "same_ordered_page": false,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 7968,
+          "visited": 7924398,
+          "skipped": 372,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 383265.192,
+      "mcp_median_ms": 1386.102,
+      "ratio_eligible": false,
+      "speedup": null
+    },
+    {
+      "query": "in",
+      "sort": "name",
+      "first_query_ms": 4922.687,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 190481.432,
+          "mcp_ms": 2827.279,
+          "same_ordered_page": false,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 1410635,
+          "visited": 7924838,
+          "skipped": 371,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 190481.432,
+      "mcp_median_ms": 2827.279,
+      "ratio_eligible": false,
+      "speedup": null
+    },
+    {
+      "query": "o",
+      "sort": "name",
+      "first_query_ms": 12.49,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 177662.143,
+          "mcp_ms": 14.387,
+          "same_ordered_page": false,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 3687325,
+          "visited": 7926050,
+          "skipped": 371,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 177662.143,
+      "mcp_median_ms": 14.387,
+      "ratio_eligible": false,
+      "speedup": null
+    },
+    {
+      "query": "ext:pdf",
+      "sort": "name",
+      "first_query_ms": 14.368,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 233380.572,
+          "mcp_ms": 14.357,
+          "same_ordered_page": false,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 8048,
+          "visited": 7927828,
+          "skipped": 371,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 233380.572,
+      "mcp_median_ms": 14.357,
+      "ratio_eligible": false,
+      "speedup": null
+    },
+    {
+      "query": "pathgrove-absent-508f5fa305474f4788f2fc10c1304cc7",
+      "sort": "name",
+      "first_query_ms": 34.613,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 221644.851,
+          "mcp_ms": 13.904,
+          "same_ordered_page": true,
+          "mcp_returned": 0,
+          "scan_returned": 0,
+          "scan_matches": 0,
+          "visited": 7940100,
+          "skipped": 371,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 221644.851,
+      "mcp_median_ms": 13.904,
+      "ratio_eligible": false,
+      "speedup": null
+    }
+  ],
+  "indexed_entries": 4793676,
+  "initial_traversal_complete": false,
+  "snapshot_sha256": "1533d34953b92687e4bc2db6a44527f38cffb7d01e389b3bcc71ad0e2341e672",
+  "mcp_initialization_ms": 2141.376,
+  "measured_date": "2026-10-23",
+  "implementation_commit": "648f17062cd92cebae750e2529270a372a5d7844",
+  "benchmark_script_sha256_lf": "2cbd42fccb79e463ad3b20802baf53b38b06c723ac885407221500ad9778d081",
+  "runtime_source_sha256_lf": {
+    "backend.py": "b11ea4d8ce82185fef7d0de9c83544a5173d159687f04e6ed50dca818928a7d6",
+    "config.py": "559db1a19848fb61e958ff57622021774c75af2983df5c7389852f3398656457",
+    "content.py": "4f3b7f3631f4e70dd6452cec9f5496880cf1f685fcc795edf968141003d4d706",
+    "index.py": "32541e9bbd4bd178a79a48ebcfaf2871a39e376c8678dbc242de2715d0975b02",
+    "names.py": "e30bfa390a64a97928eacdeed87501f5c9ae2fa50ebf047abe95298ff681d25c",
+    "ntfs.py": "7ddbb132a410f7f84a0ed164ffcae41cb5ed3fb513fdf7421a7d48c91804c7a3",
+    "query.py": "b1f494401c70ed56a03644cb410e888e80b50df3436034a23a7b5b126a31c149",
+    "server.py": "c51b50c62722c75ef3e2f597c5d00cc82f25c6f0ab6d487d78b96d2e0d364685",
+    "storage.py": "12331410f2041c3f7364be78f965d2c2377698865ee01739d0cf5f6013357c38",
+    "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
+    "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce"
+  },
+  "hardware_reference": "windows-full-disks.json"
+}

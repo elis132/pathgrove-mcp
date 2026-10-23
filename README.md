@@ -128,6 +128,23 @@ PDF/Word extraction, archive extraction and OCR are not included. Detected binar
 
 ## Performance
 
+Measurements use real volumes and actual MCP stdio calls. The comparison checks identical ordered result pages before calculating speed-ups; indexing, startup and individual request timings are reported separately.
+
+### Indexed filename search versus a fresh scan
+
+On the physical **Mac mini M1**, searching the entire APFS data volume with a completed, warmed index gave these five-trial medians. Both methods returned the same alphabetically ordered first 50 paths in every trial.
+
+| Query | Independent `os.scandir` traversal per search | Pathgrove MCP | Measured speed-up |
+|---|---|---|---|
+| `invoice` | 77.060 s | 64.424 ms | 1,196.13× |
+| `in` (over one million matching names) | 77.650 s | 2,394.593 ms | 32.43× |
+
+This compares repeated filename discovery with **reusing an existing index**, not two Pathgrove versions or competing indexed search tools. MCP transport is included; index construction, startup and initial buffer loading are excluded from these ratios. The initial index cost 17.16 minutes in the earlier whole-volume run: approximately 14 searches like `invoice` would amortize that cost under these measured conditions. OS caches were not flushed. Inaccessible paths remain outside the available coverage; page equality does not establish that all matches are identical.
+
+See [the comparison report](docs/COMPARISON.md) for every tested query, individual samples, reproduction commands and the Windows limitation. **No whole-volume Windows speed-up is claimed:** its initial index was unfinished.
+
+### Initial indexing, startup and request latency
+
 Whole-volume measurements and reproduction commands are recorded in [the benchmark report](docs/PERFORMANCE.md). Filename-query latency, initial indexing, cached startup, content reads and server memory are measured separately over actual MCP stdio calls.
 
 Measured on 2026-10-23 through actual MCP stdio calls, with five calls per query and at most 50 results.

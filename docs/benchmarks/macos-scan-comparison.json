@@ -1,0 +1,412 @@
+{
+  "kind": "cached MCP stdio vs independent fresh os.scandir per query",
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "python": "3.14.3",
+  "sqlite": "3.51.3",
+  "roots": [
+    "/System/Volumes/Data"
+  ],
+  "trials": 5,
+  "query_timeout_seconds": 10,
+  "snapshot_mode": "SQLite backup; reconciliation/watchers disabled in benchmark only",
+  "os_cache_flushed": false,
+  "queries": [
+    {
+      "query": "invoice",
+      "sort": "name",
+      "first_query_ms": 3138.592,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 77804.837,
+          "mcp_ms": 70.004,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 4501,
+          "visited": 3987009,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 76676.6,
+          "mcp_ms": 63.474,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 4501,
+          "visited": 3987009,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 78433.868,
+          "mcp_ms": 64.424,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 4501,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 76500.188,
+          "mcp_ms": 63.445,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 4501,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 77059.698,
+          "mcp_ms": 64.429,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 4501,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 77059.698,
+      "mcp_median_ms": 64.424,
+      "ratio_eligible": true,
+      "speedup": 1196.13
+    },
+    {
+      "query": "in",
+      "sort": "name",
+      "first_query_ms": 2456.095,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 76979.201,
+          "mcp_ms": 2394.593,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 1095276,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 76732.257,
+          "mcp_ms": 2138.378,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 1095276,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 79429.509,
+          "mcp_ms": 2403.585,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 1095276,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 77650.385,
+          "mcp_ms": 2142.116,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 1095276,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 78835.358,
+          "mcp_ms": 2456.1,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 1095276,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 77650.385,
+      "mcp_median_ms": 2394.593,
+      "ratio_eligible": true,
+      "speedup": 32.43
+    },
+    {
+      "query": "o",
+      "sort": "name",
+      "first_query_ms": 7.13,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 77447.806,
+          "mcp_ms": 6.716,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 2149320,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 79061.187,
+          "mcp_ms": 5.205,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 2149320,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 79063.139,
+          "mcp_ms": 5.606,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 2149320,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 78821.683,
+          "mcp_ms": 3.974,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 2149320,
+          "visited": 3987011,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 79028.68,
+          "mcp_ms": 5.493,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 2149321,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 79028.68,
+      "mcp_median_ms": 5.493,
+      "ratio_eligible": true,
+      "speedup": 14387.16
+    },
+    {
+      "query": "ext:pdf",
+      "sort": "name",
+      "first_query_ms": 3.752,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 78864.275,
+          "mcp_ms": 5.029,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 5191,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 79399.197,
+          "mcp_ms": 4.111,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 5191,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 78550.739,
+          "mcp_ms": 4.465,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 5191,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 79789.542,
+          "mcp_ms": 3.225,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 5191,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 79992.749,
+          "mcp_ms": 4.209,
+          "same_ordered_page": true,
+          "mcp_returned": 50,
+          "scan_returned": 50,
+          "scan_matches": 5191,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 79399.197,
+      "mcp_median_ms": 4.209,
+      "ratio_eligible": true,
+      "speedup": 18864.15
+    },
+    {
+      "query": "pathgrove-absent-008ea5ffbe8c44ccaf93b8c75e1e2c31",
+      "sort": "name",
+      "first_query_ms": 15.772,
+      "first_query_flags": {
+        "budget_reached": false,
+        "error": false
+      },
+      "samples": [
+        {
+          "scan_ms": 76866.691,
+          "mcp_ms": 4.693,
+          "same_ordered_page": true,
+          "mcp_returned": 0,
+          "scan_returned": 0,
+          "scan_matches": 0,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 77026.575,
+          "mcp_ms": 5.068,
+          "same_ordered_page": true,
+          "mcp_returned": 0,
+          "scan_returned": 0,
+          "scan_matches": 0,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 77152.203,
+          "mcp_ms": 4.112,
+          "same_ordered_page": true,
+          "mcp_returned": 0,
+          "scan_returned": 0,
+          "scan_matches": 0,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 77035.609,
+          "mcp_ms": 2.97,
+          "same_ordered_page": true,
+          "mcp_returned": 0,
+          "scan_returned": 0,
+          "scan_matches": 0,
+          "visited": 3987012,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        },
+        {
+          "scan_ms": 78958.464,
+          "mcp_ms": 3.939,
+          "same_ordered_page": true,
+          "mcp_returned": 0,
+          "scan_returned": 0,
+          "scan_matches": 0,
+          "visited": 3987013,
+          "skipped": 253,
+          "budget_reached": false,
+          "error": false
+        }
+      ],
+      "scan_median_ms": 77035.609,
+      "mcp_median_ms": 4.112,
+      "ratio_eligible": true,
+      "speedup": 18734.34
+    }
+  ],
+  "indexed_entries": 3986964,
+  "initial_traversal_complete": true,
+  "snapshot_sha256": "faeb7b9859e1381e917ee432d4a65db8630d116fbc787015f7109620d5ce0ea3",
+  "mcp_initialization_ms": 700.327,
+  "measured_date": "2026-10-23",
+  "implementation_commit": "648f17062cd92cebae750e2529270a372a5d7844",
+  "benchmark_script_sha256_lf": "2cbd42fccb79e463ad3b20802baf53b38b06c723ac885407221500ad9778d081",
+  "runtime_source_sha256_lf": {
+    "backend.py": "b11ea4d8ce82185fef7d0de9c83544a5173d159687f04e6ed50dca818928a7d6",
+    "config.py": "559db1a19848fb61e958ff57622021774c75af2983df5c7389852f3398656457",
+    "content.py": "4f3b7f3631f4e70dd6452cec9f5496880cf1f685fcc795edf968141003d4d706",
+    "index.py": "32541e9bbd4bd178a79a48ebcfaf2871a39e376c8678dbc242de2715d0975b02",
+    "names.py": "e30bfa390a64a97928eacdeed87501f5c9ae2fa50ebf047abe95298ff681d25c",
+    "ntfs.py": "7ddbb132a410f7f84a0ed164ffcae41cb5ed3fb513fdf7421a7d48c91804c7a3",
+    "query.py": "b1f494401c70ed56a03644cb410e888e80b50df3436034a23a7b5b126a31c149",
+    "server.py": "c51b50c62722c75ef3e2f597c5d00cc82f25c6f0ab6d487d78b96d2e0d364685",
+    "storage.py": "12331410f2041c3f7364be78f965d2c2377698865ee01739d0cf5f6013357c38",
+    "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
+    "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce"
+  },
+  "hardware_reference": "macos-full-data-volume.json"
+}

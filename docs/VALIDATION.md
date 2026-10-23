@@ -14,6 +14,14 @@ Ruff check/format, the actual MCP stdio smoke and wheel/source-package builds pa
 
 ## Coverage
 
+### Comparative benchmark follow-up
+
+The comparison benchmark adds six tests. Windows Python 3.12 passed the full suite with **195 passed, 5 skipped**, plus Ruff check/format, the actual MCP stdio smoke and wheel/source-package builds. [CI for the benchmark implementation](https://github.com/elis132/pathgrove-mcp/actions/runs/40003265339) passed all eight platform/Python combinations and lint; [the package workflow](https://github.com/elis132/pathgrove-mcp/actions/runs/40003265239) also passed.
+
+The new tests compare real MCP pages with an independent filesystem scanner, including more than 50 hits and directory links. They verify that mismatched ordering, errors, query-budget exhaustion and unfinished initial indexing suppress speed-up claims, and that public reports omit matching file paths and contents. Whole-volume comparison results and limitations are recorded in [COMPARISON.md](COMPARISON.md).
+
+### Server coverage
+
 The suite covers query grammar, Unicode substring matching, stable pagination, packed filename candidates, cache migration, shared-cache invalidation, incremental indexing, watcher updates, unavailable paths, content encodings/chunk boundaries, read budgets and direct content search before metadata readiness.
 
 Regression checks include:
