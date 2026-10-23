@@ -48,5 +48,6 @@
       "count_seconds": 42.528994,
       "snapshot_seconds": 39.758957
     }
-  ]
+  ],
+  "measured_source_commit": "1460ce942f6ccc18d197c10eaec63293916baaf3"
 }

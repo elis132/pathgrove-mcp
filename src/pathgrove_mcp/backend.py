@@ -136,7 +136,7 @@ class SearchBackend:
         index = await self._ready_index()
         try:
             await asyncio.wait_for(self._queries.acquire(), max(0, deadline - time.monotonic()))
-        except TimeoutError as exc:
+        except (TimeoutError, asyncio.TimeoutError) as exc:
             raise RuntimeError("Local index query queue timed out; retry shortly.") from exc
 
         def completed(task):
@@ -159,7 +159,7 @@ class SearchBackend:
                 asyncio.shield(worker),
                 max(0, deadline - time.monotonic()) + 0.25,
             )
-        except TimeoutError as exc:
+        except (TimeoutError, asyncio.TimeoutError) as exc:
             raise RuntimeError(
                 f"Local index query exceeded {self.config.timeout:g} seconds; narrow the query."
             ) from exc

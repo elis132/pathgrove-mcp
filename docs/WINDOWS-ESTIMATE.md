@@ -27,7 +27,7 @@ The refresh operation was **13,644.93 times faster**, not the entire index build
 
 ### Synthetic indexing growth
 
-Separate processes inserted generated metadata into fresh temporary caches through the production `_row`/`_upsert` path, with normal filename-buffer publication and batches of up to 256 rows. Baseline source: [`1460ce9`](https://github.com/elis132/pathgrove-mcp/commit/1460ce942f6ccc18d197c10eaec63293916baaf3). Optimized module hashes are recorded in its report.
+Separate processes inserted generated metadata into fresh temporary caches through the production `_row`/`_upsert` path, with normal filename-buffer publication and batches of up to 256 rows. Baseline source: [`1460ce9`](https://github.com/elis132/pathgrove-mcp/commit/1460ce942f6ccc18d197c10eaec63293916baaf3). Optimized measurements used [`0c3e924`](https://github.com/elis132/pathgrove-mcp/commit/0c3e9247d56febd3ac94b60d8e36eeb6e882b49e); module hashes are recorded in its report. A subsequent compatibility-only change handles Python 3.10 timeout exceptions in the asynchronous adapter; the measured indexing implementation is unchanged.
 
 The workload uses 64 files per generated directory, fixed timestamps/sizes and ASCII names such as `document-invoice-00000000.txt`. It creates metadata rows, **not one million real files**. Each version has one growth run with cumulative checkpoints, not repeated-trial medians. OS caches were not flushed; the machine remained active.
 

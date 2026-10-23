@@ -49,5 +49,6 @@
     "storage.py": "683a2ab81cd8c14486b12e2079e4719f506535007e94b3a43f471d2aeab0571a",
     "__init__.py": "37244b0c75d56e2da0ca54090773c2b8312955d6d9a1022f86977b282c14e2bd",
     "__main__.py": "b9826ab404a38d8ba962cc5076615ab0dea65addd565eabbe0c60cc8fbf5f0ce"
-  }
+  },
+  "measured_source_commit": "0c3e9247d56febd3ac94b60d8e36eeb6e882b49e"
 }
