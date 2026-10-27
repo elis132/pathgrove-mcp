@@ -23,7 +23,7 @@ async def test_first_run_mcp_returns_labeled_partial_results(tmp_path):
         from pathlib import Path
         from pathgrove_mcp.index import LocalIndex
         from pathgrove_mcp import main
-        def slow_walk(self,path,root,generation,failed):
+        def slow_walk(self,path,root,generation,failed,directories=None):
             first=Path(root)/'invoice-first.txt'
             yield self._row(str(first),root,generation,first.stat(),False)
             deadline=time.monotonic()+10

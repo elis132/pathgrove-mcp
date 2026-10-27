@@ -1,4 +1,8 @@
-"""Compact metadata storage: directory paths once, filenames once, no filename FTS."""
+"""Compact metadata storage: directory paths once, filenames once, no filename FTS.
+
+On Windows, journal_checkpoints and directory_ids let startup replay the NTFS
+change journal instead of walking every root (see journal.py).
+"""
 
 from __future__ import annotations
 
@@ -96,6 +100,14 @@ END;
 CREATE TRIGGER IF NOT EXISTS entries_generation INSTEAD OF UPDATE OF generation ON entries BEGIN
  UPDATE files SET generation=new.generation WHERE id=old.id;
 END;
+CREATE TABLE IF NOT EXISTS journal_checkpoints(
+ root TEXT PRIMARY KEY, volume TEXT NOT NULL, journal_id INTEGER NOT NULL,
+ usn INTEGER NOT NULL, retry TEXT NOT NULL, walked REAL);
+CREATE TABLE IF NOT EXISTS directory_ids(
+ root TEXT NOT NULL, file_id INTEGER NOT NULL, path TEXT NOT NULL,
+ path_key TEXT GENERATED ALWAYS AS (path_key(path)) VIRTUAL,
+ PRIMARY KEY(root,file_id)) WITHOUT ROWID;
+CREATE INDEX IF NOT EXISTS directory_ids_path ON directory_ids(root,path_key);
 PRAGMA user_version=3;
 """
 

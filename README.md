@@ -57,7 +57,7 @@ Add this to an MCP client that uses `mcpServers` configuration:
 
 Replace `<ABSOLUTE_CHECKOUT_PATH>` with the directory you cloned, and `<ABSOLUTE_SEARCH_ROOT>` with an existing folder you want to search. Use your own absolute paths. Forward slashes work on Windows too, avoiding nested backslash escaping. You can put multiple roots in the JSON-encoded array. If the client cannot find `uv`, use its absolute executable path.
 
-Restart your MCP client and ask it to find a file. Initial indexing runs in the background; committed batches become searchable before it finishes. Keep the server running for filesystem updates.
+Restart your MCP client and ask it to find a file. Initial indexing runs in the background; committed batches become searchable before it finishes. Keep the server running for filesystem updates. On Windows (NTFS), later restarts read the drive's change journal and revisit only changed folders instead of walking everything again. No administrator rights or other search app are needed.
 
 ## What it can do
 

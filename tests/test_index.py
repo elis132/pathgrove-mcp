@@ -255,7 +255,7 @@ async def test_retaining_unreadable_subtrees_uses_bounded_metadata_work(tmp_path
             remaining -= 1
             return remaining <= 0
 
-        def walk(path, scope, generation, failed):
+        def walk(path, scope, generation, failed, directories=None):
             failed.extend(str(path.parent) for path in hidden)
             for item in visible:
                 yield index._row(str(item), scope, generation, data, False)
@@ -338,7 +338,7 @@ async def test_first_scan_publishes_first_entry_before_completion(tmp_path, monk
     index = LocalIndex(tmp_path / "index.db", [root])
     paused, release = threading.Event(), threading.Event()
 
-    def slow_walk(path, root, generation, failed):
+    def slow_walk(path, root, generation, failed, directories=None):
         yield index._row(
             str(tmp_path / "root" / "invoice-first.txt"),
             root,

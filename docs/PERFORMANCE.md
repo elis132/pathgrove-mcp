@@ -127,8 +127,23 @@ Full aggregate reports: [Windows](benchmarks/windows-full-disks.json) and [Mac m
 | Direct content search (bounded) | 6,513.346 | 5,182.775 | 6,513.346 | 5/5 | 0/5 |
 | Indexed-candidate content search (bounded) | 10,006.810 | 10,008.347 | 10,009.844 | 5/5 | 0/5 |
 
+## Windows restarts and indexing speed
+
+Measured on the Windows machine above, unelevated, with one project root on the NVMe `D:` volume (about 144,000 entries) and the OS cache warm. The same tree and Python, sequential runs; ranges cover repeated runs on a working machine. "Before" is the code before the change journal work:
+
+| Run | Before | Now |
+|---|---|---|
+| First index, empty cache | 59.2 s | **15-19 s** |
+| Restart, nothing changed in the root | 49.8 s (full traversal) | **0.01-0.4 s** (journal replay) |
+| Restart after 20 new files in a second root | full traversal | **0.3-0.5 s** (journal replay) |
+| Full traversal when the journal cannot be used | 43-50 s, 4.1 GiB written | **13-20 s, about 200 MiB written** |
+
+Replay time is mostly reading the volume's journal since the checkpoint; it grows with activity on the whole volume, not with the size of the index. Reading an entire 34 MiB journal took about one second on this machine.
+
+Most of the earlier indexing time and almost all of its disk writes came from SQLite, not from walking folders: walking this tree alone takes about 3.5 seconds. Per-row triggers wrote statement journals to temporary files (5.2 GiB for this tree), and commits every 256 rows each reloaded the filename blocks. Insert batches now keep temporary data in memory, the writer uses a 64 MiB page cache, and commits grow further apart after the first two seconds (at most 20,000 entries or 5 seconds), while the first results still publish at once.
+
 ## Current limits
 
-Whole-drive first indexing on this Windows system remains slow. Cached startup also rebuilds in-process filename buffers, and broad two-character searches can take seconds or fall back to an inspected subset. Focused project or document roots are the practical starting point; allow a long-running server when choosing whole-volume roots. Startup reconciliation is traversal-based and does not resume from a durable OS journal.
+Whole-drive first indexing on this Windows system remains slow. Cached startup also rebuilds in-process filename buffers, and broad two-character searches can take seconds or fall back to an inspected subset. Focused project or document roots are the practical starting point; allow a long-running server when choosing whole-volume roots. On other platforms and non-NTFS volumes, startup reconciliation is traversal-based and does not resume from a durable OS journal.
 
 The initial Mac attempt exposed repeated full-index work while retaining inaccessible subtrees. That path was changed to indexed parent-location lookups and protected by a regression test before the reported Mac run was repeated. No speed-up ratio against the interrupted attempt is claimed.

@@ -11,6 +11,8 @@
 - Persistent SQLite filename and metadata index with incremental first-run batches.
 - Packed Unicode filename search, metadata filters, stable sorting and pagination.
 - Live filesystem updates and startup reconciliation.
+- Windows NTFS restarts replay the change journal without administrator rights and revisit only changed folders; `last_reconcile` reports the method.
+- First indexing and full traversals about 3 times faster, with about 20 times fewer disk writes.
 - Literal file-content predicates and direct recursive text search before index readiness.
 - Explicit partial-coverage, skipped-file and freshness diagnostics.
 - Seven read-only MCP tools and a status resource.
