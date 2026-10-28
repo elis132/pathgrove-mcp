@@ -364,6 +364,8 @@ async def test_root_back_after_being_unavailable_clears_the_error(
         index.catch_up()
         assert index.status()["last_error"].startswith("Indexed root is unavailable")
         monkeypatch.setattr(module.os.path, "isdir", real_isdir)
+        # Backdate the scan time: two scans can share one Windows clock tick.
+        index._writer.execute("UPDATE roots SET scanned=scanned-1")
         scanned = index._writer.execute("SELECT scanned FROM roots").fetchone()[0]
         index.catch_up()
         assert index.status()["last_error"] == ""
