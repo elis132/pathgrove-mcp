@@ -17,6 +17,7 @@
 - Literal file-content predicates and direct recursive text search before index readiness.
 - Explicit partial-coverage, skipped-file and freshness diagnostics.
 - Seven read-only MCP tools and a status resource.
+- `pathgrove search`, `count` and `index` terminal commands; searches read the cache without waiting for a running scan.
 - Local plugin packaging and a bundled agent skill.
 - Python implementation for Windows, Linux and Apple silicon/Intel macOS.
 - Scoped file previews, duplicate-free overlapping roots and corrected fallback pagination.

@@ -10,6 +10,7 @@ Pathgrove is a local Python MCP server. Read the README and relevant implementat
 - `content.py`: chunked text reads and direct filesystem traversal with explicit budgets.
 - `backend.py`: asynchronous adapters and worker limits.
 - `server.py`: seven MCP tools, lifecycle and diagnostics. Stdout is reserved for MCP; logs go to stderr.
+- `cli.py`: `pathgrove search/count/index` terminal commands. Queries open the cache read-only and never take the scan lock; `pathgrove` without a command stays the MCP server.
 - `journal.py`: read-only NTFS change journal access (no admin rights) for Windows restarts that revisit only changed folders.
 - `ntfs.py`: experimental read-only metadata helpers, disabled by default.
 

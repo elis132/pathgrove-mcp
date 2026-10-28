@@ -242,10 +242,17 @@ FULL_TRAVERSAL_SECONDS = 7 * 24 * 3600
 
 
 class LocalIndex:
-    def __init__(self, db_path: str | Path, roots: list[str | Path]):
+    def __init__(self, db_path: str | Path, roots: list[str | Path], *, read_only: bool = False):
+        """read_only opens an existing current cache for queries only.
+
+        It never waits for the scan lock, which a running scan holds for its whole duration.
+        """
         if sqlite3.sqlite_version_info < (3, 35, 0):
             raise RuntimeError("SQLite >= 3.35 is required")
         self.db_path = _canonical(Path(db_path).resolve())
+        self._read_only = read_only
+        if read_only and not os.path.isfile(self.db_path):
+            raise FileNotFoundError(f"No index at {self.db_path}")
         # Watchers report physical paths (e.g. /private/var rather than /var on
         # macOS). Resolve roots/cache only; recorded child symlinks stay unfollowed.
         unique = sorted({_canonical(Path(r).resolve()) for r in roots}, key=len)
@@ -288,8 +295,17 @@ class LocalIndex:
         # Five indexes per file row thrash the default 2 MiB cache during a walk.
         self._writer.execute("PRAGMA cache_size=-65536")
         try:
-            with _process_lock(self.db_path + ".scan.lock", self._stop):
-                initialize(self._writer)
+            if read_only:
+                version = self._writer.execute("PRAGMA user_version").fetchone()[0]
+                if version != 3:
+                    raise RuntimeError(
+                        f"The index at {self.db_path} has schema {version}, not 3; "
+                        "start the MCP server or run `pathgrove index` to migrate it"
+                    )
+                register_functions(self._writer)
+            else:
+                with _process_lock(self.db_path + ".scan.lock", self._stop):
+                    initialize(self._writer)
         except BaseException:
             self._writer.close()
             raise
@@ -299,6 +315,8 @@ class LocalIndex:
     async def start(self) -> None:
         if self._stop.is_set():
             raise RuntimeError("Index is closed")
+        if self._read_only:
+            raise RuntimeError("A read-only index cannot scan or watch")
         if self._worker is not None:
             return
         self._state = "building"

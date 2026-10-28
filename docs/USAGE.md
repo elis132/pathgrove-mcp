@@ -101,6 +101,25 @@ A whole-volume scope does not bypass Windows permissions or macOS privacy contro
 
 The cache base is `%LOCALAPPDATA%` on Windows and `$XDG_CACHE_HOME` or `~/.cache` on Linux/macOS. Reuse a compatible cache with the same roots through `PATHGROVE_DB`. Stop writers before manually moving cache files.
 
+## Terminal commands
+
+`pathgrove` without arguments runs the MCP server. With a command it searches the same index from a terminal:
+
+```sh
+pathgrove index                                  # build or refresh the index
+pathgrove search invoice --ext pdf --modified last7days
+pathgrove search --size ">100mb" --sort size-desc -n 20
+pathgrove search "content:TODO" --ext py --path D:\Projects
+pathgrove count --ext log --bytes                # total size of matching files
+```
+
+- `search` and `count` read the existing cache only. They never scan or watch, and they answer while the MCP server is scanning. Results are as fresh as the last scan: keep the MCP server running, or run `pathgrove index` first.
+- `index` replays the NTFS change journal where it can and walks the rest. It waits while another process holds the scan, for example the MCP server during its first build.
+- The index file is `--db`, else `PATHGROVE_DB`, else the default above. Roots are `--root` (repeatable), else `PATHGROVE_ROOTS`, else the roots the index already holds. An MCP client's `env` block does not reach your shell: set the same variables in your user environment, or pass `--db`.
+- `--ext`, `--size`, `--modified` and `--path` build query terms, so PowerShell never sees an unquoted `>`. Quote a query yourself when it contains `<`, `>` or `|`.
+- Paths go to stdout, one per line (`--null` for `xargs -0`, `--json` for one object per line); notes go to stderr. Exit status is 0 for matches, 1 for none and 2 for errors. `--sort` defaults to `date-modified-desc`, like the MCP tool.
+- Put `pathgrove` on your `PATH` with `uv tool install --editable <checkout>`.
+
 ## Agent skill and plugin
 
 The bundled [Pathgrove skill](../skills/pathgrove/SKILL.md) explains tool selection, query syntax, scope checks and partial results. Python packages include the skill as well.

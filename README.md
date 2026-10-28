@@ -68,6 +68,7 @@ Restart your MCP client and ask it to find a file. Initial indexing runs in the 
 | Find file categories or recent changes | `pathgrove_search_by_type`, `pathgrove_find_recent` |
 | Preview a file or inspect its metadata | `pathgrove_file_details` |
 | Count indexed matches or check index health | `pathgrove_count_stats`, `pathgrove_index_status` |
+| Search from a terminal or script | `pathgrove search`, `pathgrove count`, `pathgrove index` ([usage](docs/USAGE.md#terminal-commands)) |
 
 Examples of filename queries:
 
