@@ -118,7 +118,7 @@ pathgrove count --ext log --bytes                # total size of matching files
 - The index file is `--db`, else `PATHGROVE_DB`, else the default above. Roots are `--root` (repeatable), else `PATHGROVE_ROOTS`, else the roots the index already holds. An MCP client's `env` block does not reach your shell: set the same variables in your user environment, or pass `--db`.
 - `--ext`, `--size`, `--modified` and `--path` build query terms, so PowerShell never sees an unquoted `>`. Quote a query yourself when it contains `<`, `>` or `|`.
 - Paths go to stdout, one per line (`--null` for `xargs -0`, `--json` for one object per line); notes go to stderr. Exit status is 0 for matches, 1 for none and 2 for errors. `--sort` defaults to `date-modified-desc`, like the MCP tool.
-- Put `pathgrove` on your `PATH` with `uv tool install --editable <checkout>`.
+- `uv tool install pathgrove-mcp` puts `pathgrove` on your `PATH`; from a checkout use `uv tool install --editable <checkout>`.
 
 ## Agent skill and plugin
 

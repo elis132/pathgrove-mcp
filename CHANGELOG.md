@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — Unreleased
+## 0.1.0 — 2026-10-28
 
 - Exact transactional per-root counters and atomic migration of existing metadata caches.
 - Nonblocking cache-contention fallback, status metrics and shared query deadlines.
@@ -17,6 +17,7 @@
 - Literal file-content predicates and direct recursive text search before index readiness.
 - Explicit partial-coverage, skipped-file and freshness diagnostics.
 - Seven read-only MCP tools and a status resource.
+- Development lockfile uses certifi 2026.10.23, which drops the distrusted emSign root CA.
 - `pathgrove search`, `count` and `index` terminal commands; searches read the cache without waiting for a running scan.
 - Local plugin packaging and a bundled agent skill.
 - Python implementation for Windows, Linux and Apple silicon/Intel macOS.
@@ -25,4 +26,4 @@
 - Reproducible whole-volume MCP benchmarks with aggregate-only reports.
 - Pathgrove package, CLI, MCP tools and configuration naming.
 
-This version has not been published to PyPI.
+First release on PyPI.

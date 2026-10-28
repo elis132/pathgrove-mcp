@@ -25,28 +25,25 @@ On a physical **Mac mini M1 with about four million indexed entries**, repeated 
 | `invoice` | 77.06 seconds | **64 milliseconds** | **1,196×** |
 | Broad substring `in` | 77.65 seconds | **2.39 seconds** | **32×** |
 
-Five trials per query, with identical ordered first-50 result pages checked each time. The comparison is against a fresh Python `os.scandir` traversal, using a **warmed filename index**. Indexing and startup are excluded; it is not a comparison against Everything or Spotlight. These measurements describe the recorded baseline, before the later indexing optimizations. [Method and raw data →](docs/COMPARISON.md)
+Five trials per query, with identical ordered first-50 result pages checked each time. The comparison is against a fresh Python `os.scandir` traversal, using a **warmed filename index**. Indexing and startup are excluded; it is not a comparison against Everything or Spotlight. These measurements describe the recorded baseline, before the later indexing optimizations. [Method and raw data →](https://github.com/elis132/pathgrove-mcp/blob/main/docs/COMPARISON.md)
 
-The first index costs time: that Mac traversal took **17.2 minutes**, and inaccessible paths still limited coverage. Start with your project or document folders. Optimized Windows full-drive completion is **estimated at about 75 minutes**, not measured to completion. [Windows measurements and estimate →](docs/WINDOWS-ESTIMATE.md)
+The first index costs time: that Mac traversal took **17.2 minutes**, and inaccessible paths still limited coverage. Start with your project or document folders. Optimized Windows full-drive completion is **estimated at about 75 minutes**, not measured to completion. [Windows measurements and estimate →](https://github.com/elis132/pathgrove-mcp/blob/main/docs/WINDOWS-ESTIMATE.md)
 
 ## Get started
 
-Requires **Python 3.10+**, Git and [uv](https://docs.astral.sh/uv/getting-started/installation/). See the [SQLite requirements](docs/USAGE.md#requirements). Version **0.1.0** is available from source; it is not published to PyPI.
+Requires **Python 3.10+** and [uv](https://docs.astral.sh/uv/getting-started/installation/). See the [SQLite requirements](https://github.com/elis132/pathgrove-mcp/blob/main/docs/USAGE.md#requirements).
 
 ```sh
-git clone https://github.com/elis132/pathgrove-mcp.git
-cd pathgrove-mcp
-uv sync --frozen
+uv tool install pathgrove-mcp
 ```
 
-Add this to an MCP client that uses `mcpServers` configuration:
+This puts the `pathgrove` command on your `PATH`; `pipx install pathgrove-mcp` works too. Add this to an MCP client that uses `mcpServers` configuration:
 
 ```json
 {
   "mcpServers": {
     "pathgrove": {
-      "command": "uv",
-      "args": ["run", "--directory", "<ABSOLUTE_CHECKOUT_PATH>", "--frozen", "pathgrove"],
+      "command": "pathgrove",
       "env": {
         "PATHGROVE_ROOTS": "[\"<ABSOLUTE_SEARCH_ROOT>\"]"
       }
@@ -55,7 +52,9 @@ Add this to an MCP client that uses `mcpServers` configuration:
 }
 ```
 
-Replace `<ABSOLUTE_CHECKOUT_PATH>` with the directory you cloned, and `<ABSOLUTE_SEARCH_ROOT>` with an existing folder you want to search. Use your own absolute paths. Forward slashes work on Windows too, avoiding nested backslash escaping. You can put multiple roots in the JSON-encoded array. If the client cannot find `uv`, use its absolute executable path.
+Replace `<ABSOLUTE_SEARCH_ROOT>` with an existing folder you want to search. Forward slashes work on Windows too, avoiding nested backslash escaping. You can put multiple roots in the JSON-encoded array. If the client cannot find `pathgrove`, use its absolute path (`uv tool dir --bin` shows the folder), or use `"command": "uvx"` with `"args": ["--from", "pathgrove-mcp", "pathgrove"]` without installing.
+
+To run from a checkout instead, clone the repository, run `uv sync --frozen` and use `"command": "uv"` with `"args": ["run", "--directory", "<ABSOLUTE_CHECKOUT_PATH>", "--frozen", "pathgrove"]`.
 
 Restart your MCP client and ask it to find a file. Initial indexing runs in the background; committed batches become searchable before it finishes. Keep the server running for filesystem updates. On Windows (NTFS), later restarts read the drive's change journal and revisit only changed folders instead of walking everything again. No administrator rights or other search app are needed.
 
@@ -68,7 +67,7 @@ Restart your MCP client and ask it to find a file. Initial indexing runs in the 
 | Find file categories or recent changes | `pathgrove_search_by_type`, `pathgrove_find_recent` |
 | Preview a file or inspect its metadata | `pathgrove_file_details` |
 | Count indexed matches or check index health | `pathgrove_count_stats`, `pathgrove_index_status` |
-| Search from a terminal or script | `pathgrove search`, `pathgrove count`, `pathgrove index` ([usage](docs/USAGE.md#terminal-commands)) |
+| Search from a terminal or script | `pathgrove search`, `pathgrove count`, `pathgrove index` ([usage](https://github.com/elis132/pathgrove-mcp/blob/main/docs/USAGE.md#terminal-commands)) |
 
 Examples of filename queries:
 
@@ -86,10 +85,10 @@ ext:py content:"API_BASE_URL"
 
 ## Read more
 
-- [Usage, query syntax, configuration and development](docs/USAGE.md)
-- [Measured comparison and raw data](docs/COMPARISON.md) · [Whole-volume results](docs/PERFORMANCE.md) · [Windows estimate](docs/WINDOWS-ESTIMATE.md)
-- [Architecture](docs/ARCHITECTURE.md) · [Validation](docs/VALIDATION.md) · [Agent skill](skills/pathgrove/SKILL.md) · [Changelog](CHANGELOG.md)
+- [Usage, query syntax, configuration and development](https://github.com/elis132/pathgrove-mcp/blob/main/docs/USAGE.md)
+- [Measured comparison and raw data](https://github.com/elis132/pathgrove-mcp/blob/main/docs/COMPARISON.md) · [Whole-volume results](https://github.com/elis132/pathgrove-mcp/blob/main/docs/PERFORMANCE.md) · [Windows estimate](https://github.com/elis132/pathgrove-mcp/blob/main/docs/WINDOWS-ESTIMATE.md)
+- [Architecture](https://github.com/elis132/pathgrove-mcp/blob/main/docs/ARCHITECTURE.md) · [Validation](https://github.com/elis132/pathgrove-mcp/blob/main/docs/VALIDATION.md) · [Agent skill](https://github.com/elis132/pathgrove-mcp/blob/main/skills/pathgrove/SKILL.md) · [Changelog](https://github.com/elis132/pathgrove-mcp/blob/main/CHANGELOG.md)
 
 CI tests Python 3.10 and 3.14 across Linux, Windows and ARM/Intel macOS. Linux tests, lint and package builds use **Ubicloud** (`ubicloud-standard-2`); Windows and macOS use native GitHub-hosted runners. Forks need the [Ubicloud app connected](https://www.ubicloud.com/docs/github-actions-integration/quickstart) to run those Linux jobs.
 
-[MIT license](LICENSE).
+[MIT license](https://github.com/elis132/pathgrove-mcp/blob/main/LICENSE).
