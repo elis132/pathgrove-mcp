@@ -12,6 +12,7 @@
 - Packed Unicode filename search, metadata filters, stable sorting and pagination.
 - Live filesystem updates and startup reconciliation.
 - Windows NTFS restarts replay the change journal without administrator rights and revisit only changed folders; `last_reconcile` reports the method.
+- OneDrive Files On-Demand and other cloud placeholder folders are indexed without downloading files; symlinks, junctions and mount points are still not followed.
 - First indexing and full traversals about 3 times faster, with about 20 times fewer disk writes.
 - Literal file-content predicates and direct recursive text search before index readiness.
 - Explicit partial-coverage, skipped-file and freshness diagnostics.

@@ -1,6 +1,7 @@
 """NTFS change journal replay: record parsing, replay logic and real Windows restarts."""
 
 import asyncio
+import contextlib
 import json
 import os
 import random
@@ -10,6 +11,7 @@ import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -437,6 +439,142 @@ async def test_unusable_journal_walks_at_startup_but_never_periodically(tmp_path
         assert index.status()["scan_count"] == 2
         assert "recreated" in index.status()["last_reconcile"]
         assert index.count("offline.txt") == 1
+    finally:
+        await index.close()
+
+
+CLOUD = 0x9000601A  # A OneDrive Files On-Demand folder: not a name surrogate.
+JUNCTION = 0xA0000003  # A name surrogate, like symlinks and mount points.
+
+
+def _reparse(monkeypatch, tags):
+    """Give entries named in `tags` the Windows reparse attribute and tag, on any OS.
+
+    Listings carry the tag; os.stat, like CPython on Windows, reports tag 0 for a
+    reparse point that is not a link (it opens through it). Reading a file below a
+    cloud folder fails the test: indexing may only list folders and read attributes.
+    """
+    import builtins
+
+    import pathgrove_mcp.index as module
+
+    real_stat, real_scandir = module.os.stat, module.os.scandir
+    real_open, real_os_open = builtins.open, module.os.open
+
+    def tagged(data, tag):
+        if tag is None:
+            return data
+        fields = {name: getattr(data, name) for name in dir(data) if name.startswith("st_")}
+        fields["st_file_attributes"] = fields.get("st_file_attributes", 0) | 0x400
+        fields["st_reparse_tag"] = tag
+        return SimpleNamespace(**fields)
+
+    def stat(path, *args, **kwargs):
+        tag = None if isinstance(path, int) else tags.get(os.path.basename(path))
+        if tag is not None and not tag & 0x20000000:
+            tag = 0
+        return tagged(real_stat(path, *args, **kwargs), tag)
+
+    class Entry:
+        def __init__(self, entry):
+            self._entry, self.name, self.path = entry, entry.name, entry.path
+
+        def is_dir(self, *, follow_symlinks=True):
+            return self._entry.is_dir(follow_symlinks=follow_symlinks)
+
+        def stat(self, *, follow_symlinks=True):
+            return tagged(self._entry.stat(follow_symlinks=follow_symlinks), tags.get(self.name))
+
+    @contextlib.contextmanager
+    def scandir(path):
+        with real_scandir(path) as listing:
+            yield [Entry(entry) for entry in listing]
+
+    def below_cloud(path):
+        if not isinstance(path, (str, os.PathLike)):
+            return False
+        return any(part in tags and not tags[part] & 0x20000000 for part in Path(path).parts[:-1])
+
+    def guarded_open(file, mode="r", *args, **kwargs):
+        assert set(mode) & set("wax+") or not below_cloud(file), f"read {file}"
+        return real_open(file, mode, *args, **kwargs)
+
+    def guarded_os_open(path, flags, *args, **kwargs):
+        assert flags & (os.O_WRONLY | os.O_RDWR) or not below_cloud(path), f"read {path}"
+        return real_os_open(path, flags, *args, **kwargs)
+
+    monkeypatch.setattr(module.os, "stat", stat)
+    monkeypatch.setattr(module.os, "scandir", scandir)
+    monkeypatch.setattr(builtins, "open", guarded_open)
+    monkeypatch.setattr(module.os, "open", guarded_os_open)
+
+
+async def test_cloud_folders_are_walked_and_links_are_not(tmp_path, fake_journal, monkeypatch):
+    root = tmp_path / "root"
+    (root / "Cloud" / "sub").mkdir(parents=True)
+    (root / "Cloud" / "sub" / "deep.txt").write_text("x")
+    (root / "Link").mkdir()
+    (root / "Link" / "behind.txt").write_text("x")
+    tags = {"Cloud": CLOUD, "Link": JUNCTION}
+    _reparse(monkeypatch, tags)
+    index = LocalIndex(tmp_path / "index.db", [root])
+    try:
+        index.rescan()
+        names = {row["name"] for row in index.search("", max_results=100)}
+        assert names == {"Cloud", "sub", "deep.txt", "Link"}
+        # Journal records can name a followed cloud folder, never a link.
+        assert index._mapped(index.roots[0], str(root / "Cloud"), _ino(root / "Cloud"))
+        assert index._recorded_path(index.roots[0], _ino(root / "Link")) is None
+        for name, tag in (("NewCloud", CLOUD), ("NewLink", JUNCTION)):
+            (root / name).mkdir()
+            (root / name / f"in-{name}.txt").write_text("x")
+            tags[name] = tag
+        index.apply_changes({(1, str(root / "NewCloud")), (1, str(root / "NewLink"))})
+        assert index.count("in-NewCloud.txt") == 1
+        assert index.count("in-NewLink.txt") == 0
+    finally:
+        await index.close()
+
+
+async def test_replay_and_retries_walk_cloud_folders_but_not_links(
+    tmp_path, fake_journal, monkeypatch
+):
+    import pathgrove_mcp.index as module
+
+    root = tmp_path / "root"
+    for name in ("Cloud", "Private", "Became", "Was"):
+        (root / name).mkdir(parents=True)
+        (root / name / f"in-{name}.txt").write_text("x")
+    tags = {"Cloud": CLOUD, "Private": CLOUD}
+    _reparse(monkeypatch, tags)
+    tagged_scandir = module.os.scandir
+
+    def denied(path):
+        if str(path) == str(root / "Private"):
+            raise PermissionError("fixture denial")
+        return tagged_scandir(path)
+
+    index = LocalIndex(tmp_path / "index.db", [root])
+    try:
+        monkeypatch.setattr(module.os, "scandir", denied)
+        index.rescan()
+        assert index.count("in-Private.txt") == 0
+        monkeypatch.setattr(module.os, "scandir", tagged_scandir)
+        (root / "Cloud" / "changed.txt").write_text("x")
+        for name, tag in (("NewCloud", CLOUD), ("NewLink", JUNCTION)):
+            (root / name).mkdir()
+            (root / name / f"in-{name}.txt").write_text("x")
+            tags[name] = tag
+        tags.update(Became=CLOUD, Was=JUNCTION)  # Files On-Demand turned on; a folder now a link.
+        fake_journal.changed = {_ino(root), _ino(root / "Cloud")}
+        index.catch_up()
+        assert index.status()["scan_count"] == 1  # Replayed, not walked.
+        assert index.count("in-Private.txt") == 1  # The startup retry walks a cloud folder.
+        assert index.count("changed.txt") == 1
+        assert index.count("in-NewCloud.txt") == 1
+        assert index.count("in-NewLink.txt") == 0
+        assert index.count("in-Became.txt") == 1
+        assert index.count("in-Was.txt") == 0
     finally:
         await index.close()
 

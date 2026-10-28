@@ -148,13 +148,26 @@ def _real(path: str) -> bool:
     return _key(os.path.realpath(path)) == _key(_canonical(path))
 
 
+def _link(data) -> bool:
+    """A symlink, junction or mount point (name-surrogate reparse point): never followed.
+
+    Other reparse points, such as OneDrive Files On-Demand folders, are walked like any
+    folder: listing reads only names and attributes, which never downloads a cloud file.
+    os.stat reports tag 0 for the non-link reparse points it opens through.
+    """
+    return bool(
+        getattr(data, "st_file_attributes", 0) & 0x400
+        and getattr(data, "st_reparse_tag", 0) & 0x20000000
+    )
+
+
 def _plain_directory(path: str) -> bool:
     """A real directory, not a link or junction (those are recorded, never followed)."""
     try:
         data = os.stat(path, follow_symlinks=False)
     except OSError:
         return False
-    return S_ISDIR(data.st_mode) and not getattr(data, "st_file_attributes", 0) & 0x400
+    return S_ISDIR(data.st_mode) and not _link(data)
 
 
 def _subtree_where(root: str, path: str):
@@ -781,9 +794,7 @@ class LocalIndex:
         is_root = _key(path) == _key(root)
         try:
             info = os.stat(path, follow_symlinks=False)
-            plain = S_ISDIR(info.st_mode) and (
-                is_root or not getattr(info, "st_file_attributes", 0) & 0x400
-            )
+            plain = S_ISDIR(info.st_mode) and (is_root or not _link(info))
             if plain and not is_root and not _real(path):
                 plain = False  # Reached through a junction or link.
             if plain:
@@ -817,7 +828,7 @@ class LocalIndex:
             try:
                 data = child.stat(follow_symlinks=False)
                 directory = child.is_dir(follow_symlinks=False)
-                descend = directory and not getattr(data, "st_file_attributes", 0) & 0x400
+                descend = directory and not _link(data)
                 renamed = prior is not None and prior[0] != child.name  # Case-only rename.
                 demoted = prior is not None and prior[1] and not descend  # Now file or link.
                 row = unseen = None
@@ -906,9 +917,7 @@ class LocalIndex:
             try:
                 if directories is not None:
                     data = os.stat(parent, follow_symlinks=False)
-                    if listed is not None and (
-                        not S_ISDIR(data.st_mode) or getattr(data, "st_file_attributes", 0) & 0x400
-                    ):
+                    if listed is not None and (not S_ISDIR(data.st_mode) or _link(data)):
                         # Became a file or a link after it was listed: never followed.
                         yield self._row(parent, root, generation, data, S_ISDIR(data.st_mode))
                         continue
@@ -928,8 +937,8 @@ class LocalIndex:
                             data = child.stat(follow_symlinks=False)
                             directory = child.is_dir(follow_symlinks=False)
                             yield self._row(child.path, root, generation, data, directory)
-                            # Reparse points and symlinks are recorded, never followed.
-                            if directory and not getattr(data, "st_file_attributes", 0) & 0x400:
+                            # Links, junctions and mount points are recorded, never followed.
+                            if directory and not _link(data):
                                 stack.append((child.path, data))
                         except UnicodeEncodeError:
                             self._skipped += 1
@@ -1087,7 +1096,7 @@ class LocalIndex:
                     directory
                     and (not indexed or replaced)
                     and (path != root or 1 in events[path] or 3 in events[path])
-                    and not getattr(stat, "st_file_attributes", 0) & 0x400
+                    and not _link(stat)
                 ):
                     batch = []
                     failed_subtrees: list[str] = []

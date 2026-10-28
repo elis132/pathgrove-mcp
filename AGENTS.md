@@ -13,7 +13,7 @@ Pathgrove is a local Python MCP server. Read the README and relevant implementat
 - `journal.py`: read-only NTFS change journal access (no admin rights) for Windows restarts that revisit only changed folders.
 - `ntfs.py`: experimental read-only metadata helpers, disabled by default.
 
-Preserve root scoping, symlink/reparse exclusions and inaccessible-subtree retention. Publish initial scan batches promptly. Keep watcher updates scoped to changed paths and exclude cache/lock files. Coordinate full scan generations across processes sharing a cache.
+Preserve root scoping, link exclusions (symlinks, junctions, mount points; cloud placeholder folders are walked but never hydrated) and inaccessible-subtree retention. Publish initial scan batches promptly. Keep watcher updates scoped to changed paths and exclude cache/lock files. Coordinate full scan generations across processes sharing a cache.
 
 Propagate query-specific partial/freshness metadata through every layer. Counts are exact for the current snapshot or return an error. A budget-limited search must identify incomplete coverage and its ordering/pagination limits. Content reads are not a filesystem snapshot.
 

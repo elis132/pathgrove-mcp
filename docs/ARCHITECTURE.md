@@ -20,7 +20,7 @@ The first discovered entry is committed immediately; for the first two seconds b
 
 Journal limits: a change to a hard-linked file names only the directory of the link that recorded it, so a size or time seen through another link's directory updates when that directory changes again. Changes made while another operating system mounted the volume (for example Linux with ntfs-3g) or a restore from backup leave no records; each root therefore gets a full traversal at least once a week. The journal's size is a volume setting. An administrator can enlarge it so that restarts after longer breaks stay fast, for example `fsutil usn createjournal m=0x20000000 a=0x4000000 C:` (512 MiB); Pathgrove never changes it. Names that differ only in case inside a case-sensitive folder, or only by full case folding (`ß`/`ss`), share one index key, as they did before the journal.
 
-Missing or unreadable subtrees retain cached entries and mark coverage incomplete. Links/reparse points are recorded but not followed. Experimental read-only NTFS enumeration cannot replace the portable traversal as the authoritative scanner.
+Missing or unreadable subtrees retain cached entries and mark coverage incomplete. Symlinks, junctions and mount points are recorded but not followed. Other reparse points, such as OneDrive Files On-Demand folders, are walked: listing reads only names and attributes, so it never downloads cloud files. Experimental read-only NTFS enumeration cannot replace the portable traversal as the authoritative scanner.
 
 Retention and deletion share an indexed subtree predicate over normalized parent locations. An inaccessible path does not trigger a repeated scan of every file's computed full path.
 
